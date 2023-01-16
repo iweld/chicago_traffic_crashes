@@ -54,6 +54,8 @@
 
 */
 
+-- What is the total count of recorded crashes?
+
 SELECT
 	count(*)
 FROM
@@ -64,4 +66,6 @@ FROM
 count |
 ------+
 686276|
+
+
 
