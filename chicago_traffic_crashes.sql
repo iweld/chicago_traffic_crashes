@@ -67,5 +67,33 @@ count |
 ------+
 686276|
 
+-- What is the maximum and minimum date?
+
+SELECT 
+	min(crash_date),
+	max(crash_date)
+FROM	
+	crashes;
+
+-- Results:
+
+min                    |max                    |
+-----------------------+-----------------------+
+2013-03-03 16:48:00.000|2023-01-12 23:36:00.000|
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
