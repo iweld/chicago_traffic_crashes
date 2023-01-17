@@ -67,7 +67,7 @@ count |
 ------+
 686276|
 
--- What is the maximum and minimum date?
+-- What is the earliest and latest date?
 
 SELECT 
 	min(crash_date),
@@ -80,6 +80,44 @@ FROM
 min                    |max                    |
 -----------------------+-----------------------+
 2013-03-03 16:48:00.000|2023-01-12 23:36:00.000|
+
+-- What is the number of reported crashes per year?
+
+SELECT
+	EXTRACT(YEAR FROM crash_date) AS crash_year,
+	count(*) AS reported_crashes
+FROM
+	crashes
+GROUP BY
+	crash_year
+ORDER BY 
+	crash_year;
+
+-- Results:
+
+crash_year|reported_crashes|
+----------+----------------+
+    2013.0|               2|
+    2014.0|               6|
+    2015.0|            9828|
+    2016.0|           44297|
+    2017.0|           83786|
+    2018.0|          118950|
+    2019.0|          117762|
+    2020.0|           92088|
+    2021.0|          108756|
+    2022.0|          108292|
+    2023.0|            2509|
+
+
+
+
+
+
+
+
+
+	
 
 
 
