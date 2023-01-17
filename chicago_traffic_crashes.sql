@@ -159,14 +159,26 @@ no injury / drive away          |505775|
 -- What is the crash count depending on the day of the week?
 
 SELECT
-	initcap(crash_day_of_week),
+	initcap(crash_day_of_week) AS day_of_week,
 	count(*) AS crash_count
 FROM 
 	crashes
 GROUP BY 
 	crash_day_of_week
 ORDER BY 
-	crash_count desc
+	crash_count DESC;
+
+-- Results:
+
+day_of_week|crash_count|
+-----------+-----------+
+Friday     |     111684|
+Saturday   |     101816|
+Thursday   |      98239|
+Tuesday    |      97883|
+Wednesday  |      97257|
+Monday     |      94582|
+Sunday     |      84815|
 
 
 
