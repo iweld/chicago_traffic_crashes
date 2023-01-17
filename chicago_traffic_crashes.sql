@@ -112,7 +112,7 @@ crash_year|reported_crashes|
 -- What is the number of reported crashes and weather conditions betweeen 2017 and 2022?   
 
 SELECT
-	EXTRACT(YEAR FROM crash_date) AS crash_year,
+	EXTRACT(YEAR FROM crash_date)::numeric AS crash_year,
 	weather_condition,
 	count(*) AS reported_crashes
 FROM
@@ -120,7 +120,7 @@ FROM
 WHERE
 	EXTRACT(YEAR FROM crash_date) between '2017.0' AND '2022.0'
 AND
-	weather_condition != 'unknown'
+	weather_condition = 'clear'
 GROUP BY
 	crash_year,
 	weather_condition
@@ -132,30 +132,12 @@ ORDER BY
 
 crash_year|weather_condition|reported_crashes|
 ----------+-----------------+----------------+
-    2017.0|clear            |           67663|
-    2017.0|cloudy/overcast  |            2310|
-    2017.0|rain             |            8302|
-    2017.0|snow             |            2011|
-    2018.0|clear            |           94006|
-    2018.0|cloudy/overcast  |            3853|
-    2018.0|rain             |           10744|
-    2018.0|snow             |            4621|
-    2019.0|clear            |           91604|
-    2019.0|cloudy/overcast  |            3885|
-    2019.0|rain             |           11305|
-    2019.0|snow             |            4893|
-    2020.0|clear            |           74195|
-    2020.0|cloudy/overcast  |            2509|
-    2020.0|rain             |            7626|
-    2020.0|snow             |            3042|
-    2021.0|clear            |           86696|
-    2021.0|cloudy/overcast  |            3180|
-    2021.0|rain             |            7825|
-    2021.0|snow             |            4323|
-    2022.0|clear            |           83615|
-    2022.0|cloudy/overcast  |            2966|
-    2022.0|rain             |            8626|
-    2022.0|snow             |            4195|
+      2017|clear            |           67663|
+      2018|clear            |           94006|
+      2019|clear            |           91604|
+      2020|clear            |           74195|
+      2021|clear            |           86696|
+      2022|clear            |           83615|
 
     
 
