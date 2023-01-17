@@ -137,7 +137,64 @@ crash_year|weather_condition|reported_crashes|
       2019|clear            |           91604|
       2020|clear            |           74195|
       2021|clear            |           86696|
-      2022|clear            |           83615|
+      2022|clear            |           83615| 
+     
+-- How many crashes involved and injury or vehicle tow?
+      
+SELECT 
+	crash_type,
+	count(*)
+FROM 
+	crashes
+GROUP BY 
+	crash_type
+	
+-- Results:
+	
+crash_type                      |count |
+--------------------------------+------+
+injury and / or tow due to crash|180501|
+no injury / drive away          |505775|
+
+-- What is the crash count depending on the day of the week?
+
+SELECT
+	initcap(crash_day_of_week),
+	count(*) AS crash_count
+FROM 
+	crashes
+GROUP BY 
+	crash_day_of_week
+ORDER BY 
+	crash_count desc
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
     
 
