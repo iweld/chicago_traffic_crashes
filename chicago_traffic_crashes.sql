@@ -108,7 +108,31 @@ crash_year|reported_crashes|
     2021.0|          108756|
     2022.0|          108292|
     2023.0|            2509|
+ 
+-- What is the number of reported crashes 2017 and 2022?   
 
+SELECT
+	EXTRACT(YEAR FROM crash_date) AS crash_year,
+	count(*) AS reported_crashes
+FROM
+	crashes
+WHERE
+	EXTRACT(YEAR FROM crash_date) between '2017.0' AND '2022.0'
+GROUP BY
+	crash_year
+ORDER BY 
+	crash_year;
+
+-- Results:
+
+crash_year|reported_crashes|
+----------+----------------+
+    2017.0|           83786|
+    2018.0|          118950|
+    2019.0|          117762|
+    2020.0|           92088|
+    2021.0|          108756|
+    2022.0|          108292|
 
 
 
