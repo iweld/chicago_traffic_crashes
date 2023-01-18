@@ -180,6 +180,58 @@ Wednesday  |      97257|
 Monday     |      94582|
 Sunday     |      84815|
 
+-- What was the primary cause of the crash?
+
+SELECT 
+	DISTINCT primary_cause
+FROM
+	crashes;
+
+-- Results:
+
+primary_cause                                                                   |
+--------------------------------------------------------------------------------+
+failing to reduce speed to avoid crash                                          |
+equipment - vehicle condition                                                   |
+cell phone use other than texting                                               |
+disregarding stop sign                                                          |
+vision obscured (signs, tree limbs, buildings, etc.)                            |
+unable to determine                                                             |
+improper lane usage                                                             |
+driving on wrong side/wrong way                                                 |
+physical condition of driver                                                    |
+failing to yield right-of-way                                                   |
+exceeding safe speed for conditions                                             |
+distraction - other electronic device (navigation device, dvd player, etc.)     |
+passing stopped school bus                                                      |
+road construction/maintenance                                                   |
+had been drinking (use when arrest is not made)                                 |
+road engineering/surface/marking defects                                        |
+improper turning/no signal                                                      |
+distraction - from outside vehicle                                              |
+bicycle advancing legally on red light                                          |
+distraction - from inside vehicle                                               |
+disregarding other traffic signs                                                |
+related to bus stop                                                             |
+motorcycle advancing legally on red light                                       |
+texting                                                                         |
+improper backing                                                                |
+following too closely                                                           |
+evasive action due to animal, object, nonmotorist                               |
+disregarding road markings                                                      |
+driving skills/knowledge/experience                                             |
+under the influence of alcohol/drugs (use when arrest is effected)              |
+not applicable                                                                  |
+disregarding yield sign                                                         |
+disregarding traffic signals                                                    |
+turning right on red                                                            |
+obstructed crosswalks                                                           |
+exceeding authorized speed limit                                                |
+operating vehicle in erratic, reckless, careless, negligent or aggressive manner|
+improper overtaking/passing                                                     |
+weather                                                                         |
+animal                                                                          |
+
 
 
 
