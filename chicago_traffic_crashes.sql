@@ -232,12 +232,19 @@ improper overtaking/passing                                                     
 weather                                                                         |
 animal                                                                          |
 
+-- What is the number of text caused accidents and on what day of the week?
+
 SELECT
-	count(*)
+	initcap(crash_day_of_week) AS day_of_week,
+	count(*) AS crash_count
 FROM 
 	crashes
 WHERE
-	primary_cause LIKE '%texting%';
+	primary_cause LIKE '%text%'
+GROUP BY
+	day_of_week
+ORDER BY
+	crash_count DESC;
 
 
 
