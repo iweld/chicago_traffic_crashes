@@ -232,6 +232,14 @@ improper overtaking/passing                                                     
 weather                                                                         |
 animal                                                                          |
 
+SELECT
+	count(*)
+FROM 
+	crashes
+WHERE
+	primary_cause LIKE '%texting%';
+
+
 
 
 
