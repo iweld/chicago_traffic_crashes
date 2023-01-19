@@ -325,6 +325,32 @@ hit_and_run|crash_count|
 -----------+-----------+
 y          |     203703|
 
+-- Create a temp table with only crashes betweeon 2017 and 2022
+DROP TABLE IF EXISTS crash_timeline;
+CREATE TEMP TABLE crash_timeline AS
+(
+	SELECT
+		*
+	FROM
+		crashes
+	WHERE
+		EXTRACT(YEAR FROM crash_date) between '2017.0' AND '2022.0'
+);
+
+SELECT
+	min(crash_date),
+	max(crash_date)
+FROM
+	crash_timeline;
+
+-- Results:
+
+min                    |max                    |
+-----------------------+-----------------------+
+2017-01-01 00:01:00.000|2022-12-31 23:59:00.000|
+
+
+
 
 
 
