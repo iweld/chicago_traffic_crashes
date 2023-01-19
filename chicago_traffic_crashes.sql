@@ -246,6 +246,56 @@ GROUP BY
 ORDER BY
 	crash_count DESC;
 
+-- Results:
+
+day_of_week|crash_count|
+-----------+-----------+
+Saturday   |        210|
+Friday     |        193|
+Sunday     |        174|
+Tuesday    |        172|
+Thursday   |        165|
+Monday     |        156|
+Wednesday  |        150|
+
+-- What is the most common primary cause of crashes?
+
+SELECT
+	DISTINCT primary_cause,
+	count(*) cause_count
+FROM
+	crashes
+GROUP BY
+	primary_cause
+ORDER BY
+	cause_count DESC
+LIMIT 10;
+
+-- Results:
+
+primary_cause                         |cause_count|
+--------------------------------------+-----------+
+unable to determine                   |     263512|
+failing to yield right-of-way         |      74978|
+following too closely                 |      68471|
+not applicable                        |      36078|
+improper overtaking/passing           |      33180|
+failing to reduce speed to avoid crash|      29374|
+improper backing                      |      28028|
+improper lane usage                   |      25346|
+improper turning/no signal            |      22665|
+driving skills/knowledge/experience   |      22204|
+
+
+
+
+
+
+
+
+
+
+
 
 
 
