@@ -307,8 +307,23 @@ daylight              |     442082|
 dusk                  |      20117|
 unknown               |      28176|
 
+-- How many hit and runs?
 
+SELECT
+	hit_and_run,
+	count(*) AS crash_count
+FROM
+	crashes
+WHERE
+	hit_and_run = 'y'
+GROUP BY
+	hit_and_run;
 
+-- Results:
+
+hit_and_run|crash_count|
+-----------+-----------+
+y          |     203703|
 
 
 
