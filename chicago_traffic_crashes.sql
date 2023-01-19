@@ -286,10 +286,26 @@ improper lane usage                   |      25346|
 improper turning/no signal            |      22665|
 driving skills/knowledge/experience   |      22204|
 
+-- What where the lighting conditions for most crashes?
 
+SELECT 
+	DISTINCT lighting_condition,
+	count(*) AS crash_count
+FROM
+	crashes
+GROUP BY
+	lighting_condition;
 
+-- Results:
 
-
+lighting_condition    |crash_count|
+----------------------+-----------+
+darkness              |      32967|
+darkness, lighted road|     151402|
+dawn                  |      11532|
+daylight              |     442082|
+dusk                  |      20117|
+unknown               |      28176|
 
 
 
