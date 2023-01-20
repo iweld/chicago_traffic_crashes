@@ -350,6 +350,30 @@ min                    |max                    |
 2017-01-01 00:01:00.000|2022-12-31 23:59:00.000|
 
 
+-- What is the count of crashes during different lighting conditions that resulted in a fatality?
+
+SELECT
+	lighting_condition,
+	count(*)
+FROM
+	crash_timeline
+WHERE
+	injuries_fatal <> '0'
+GROUP BY
+	lighting_condition;
+
+-- Results:
+
+lighting_condition    |count|
+----------------------+-----+
+darkness, lighted road|  368|
+unknown               |    6|
+dawn                  |   13|
+dusk                  |   23|
+daylight              |  269|
+darkness              |   42|
+
+
 
 
 
