@@ -373,6 +373,30 @@ dusk                  |   23|
 daylight              |  269|
 darkness              |   42|
 
+-- What are the different kinds of road conditions and crash count?
+
+SELECT
+	DISTINCT roadway_surface_condition,
+	count(*) AS crash_count
+FROM
+	crash_timeline
+GROUP BY
+	roadway_surface_condition
+ORDER BY
+	crash_count DESC;
+
+-- Results:
+
+roadway_surface_condition|crash_count|
+-------------------------+-----------+
+dry                      |     468910|
+wet                      |      83867|
+unknown                  |      46949|
+snow or slush            |      23511|
+ice                      |       4553|
+other                    |       1594|
+sand, mud, dirt          |        250|
+
 
 
 
