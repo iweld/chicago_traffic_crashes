@@ -397,7 +397,17 @@ ice                      |       4553|
 other                    |       1594|
 sand, mud, dirt          |        250|
 
+-- What is the day difference between crash date and the date it was reported?
 
+SELECT
+	crash_date AS crash_date,
+	date_police_notified,
+	date_police_notified - crash_date AS date_difference
+FROM
+	crash_timeline
+ORDER BY
+	date_difference DESC
+LIMIT 10;
 
 
 
