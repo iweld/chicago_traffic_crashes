@@ -437,9 +437,26 @@ SELECT
 	date_police_notified - crash_date AS date_difference
 FROM
 	crash_timeline
+WHERE
+	(date_police_notified - crash_date) > '00:00:00'
 ORDER BY
 	date_difference
 LIMIT 10;
+
+-- Results:
+
+first_crash_type            |primary_cause                         |crash_date             |date_police_notified   |date_difference|
+----------------------------+--------------------------------------+-----------------------+-----------------------+---------------+
+fixed object                |not applicable                        |2021-01-01 02:29:00.000|2021-01-01 02:30:00.000|       00:01:00|
+rear end                    |failing to reduce speed to avoid crash|2022-01-08 21:13:00.000|2022-01-08 21:14:00.000|       00:01:00|
+rear end                    |unable to determine                   |2022-07-15 17:03:00.000|2022-07-15 17:04:00.000|       00:01:00|
+rear end                    |equipment - vehicle condition         |2022-07-15 08:30:00.000|2022-07-15 08:31:00.000|       00:01:00|
+parked motor vehicle        |unable to determine                   |2021-01-06 19:00:00.000|2021-01-06 19:01:00.000|       00:01:00|
+sideswipe opposite direction|driving skills/knowledge/experience   |2022-07-15 16:09:00.000|2022-07-15 16:10:00.000|       00:01:00|
+pedestrian                  |failing to yield right-of-way         |2022-10-11 18:45:00.000|2022-10-11 18:46:00.000|       00:01:00|
+rear end                    |failing to reduce speed to avoid crash|2022-07-15 13:14:00.000|2022-07-15 13:15:00.000|       00:01:00|
+pedestrian                  |driving skills/knowledge/experience   |2019-12-03 14:22:00.000|2019-12-03 14:23:00.000|       00:01:00|
+angle                       |disregarding stop sign                |2022-04-27 06:57:00.000|2022-04-27 06:58:00.000|       00:01:00|
 
 
 
