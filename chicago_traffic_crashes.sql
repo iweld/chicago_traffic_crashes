@@ -397,7 +397,7 @@ ice                      |       4553|
 other                    |       1594|
 sand, mud, dirt          |        250|
 
--- What is the day difference between crash date and the date it was reported?
+-- What is the max amount difference between crash date and the date it was reported?
 
 SELECT
 	first_crash_type,
@@ -426,7 +426,18 @@ rear end            |2020-09-22 16:30:00.000|2021-11-26 16:30:00.000|         43
 parked motor vehicle|2021-07-15 19:00:00.000|2022-08-31 11:25:00.000|411 days 16:25:00|
 
 
+-- What is the least amount of difference between crash date and the date it was reported?
 
+SELECT
+	first_crash_type,
+	crash_date AS crash_date,
+	date_police_notified,
+	date_police_notified - crash_date AS date_difference
+FROM
+	crash_timeline
+ORDER BY
+	date_difference DESC
+LIMIT 10;
 
 
 
