@@ -401,6 +401,7 @@ sand, mud, dirt          |        250|
 
 SELECT
 	first_crash_type,
+	primary_cause,
 	crash_date AS crash_date,
 	date_police_notified,
 	date_police_notified - crash_date AS date_difference
@@ -412,31 +413,32 @@ LIMIT 10;
 
 -- Results:
 
-first_crash_type    |crash_date             |date_police_notified   |date_difference  |
---------------------+-----------------------+-----------------------+-----------------+
-pedestrian          |2017-12-17 22:59:00.000|2019-12-19 14:30:00.000|731 days 15:31:00|
-rear end            |2020-05-10 13:15:00.000|2022-05-11 11:00:00.000|730 days 21:45:00|
-rear end            |2020-10-30 20:00:00.000|2022-10-30 20:00:00.000|         730 days|
-fixed object        |2019-02-19 14:44:00.000|2021-01-21 14:50:00.000|702 days 00:06:00|
-pedestrian          |2017-04-10 15:30:00.000|2018-12-13 11:50:00.000|611 days 20:20:00|
-fixed object        |2018-10-19 13:00:00.000|2020-03-07 19:15:00.000|505 days 06:15:00|
-fixed object        |2017-08-03 11:24:00.000|2018-12-14 20:01:00.000|498 days 08:37:00|
-parked motor vehicle|2018-11-13 01:00:00.000|2020-02-10 14:04:00.000|454 days 13:04:00|
-rear end            |2020-09-22 16:30:00.000|2021-11-26 16:30:00.000|         430 days|
-parked motor vehicle|2021-07-15 19:00:00.000|2022-08-31 11:25:00.000|411 days 16:25:00|
+first_crash_type    |primary_cause                      |crash_date             |date_police_notified   |date_difference  |
+--------------------+-----------------------------------+-----------------------+-----------------------+-----------------+
+pedestrian          |failing to yield right-of-way      |2017-12-17 22:59:00.000|2019-12-19 14:30:00.000|731 days 15:31:00|
+rear end            |unable to determine                |2020-05-10 13:15:00.000|2022-05-11 11:00:00.000|730 days 21:45:00|
+rear end            |unable to determine                |2020-10-30 20:00:00.000|2022-10-30 20:00:00.000|         730 days|
+fixed object        |unable to determine                |2019-02-19 14:44:00.000|2021-01-21 14:50:00.000|702 days 00:06:00|
+pedestrian          |exceeding safe speed for conditions|2017-04-10 15:30:00.000|2018-12-13 11:50:00.000|611 days 20:20:00|
+fixed object        |road construction/maintenance      |2018-10-19 13:00:00.000|2020-03-07 19:15:00.000|505 days 06:15:00|
+fixed object        |not applicable                     |2017-08-03 11:24:00.000|2018-12-14 20:01:00.000|498 days 08:37:00|
+parked motor vehicle|unable to determine                |2018-11-13 01:00:00.000|2020-02-10 14:04:00.000|454 days 13:04:00|
+rear end            |failing to yield right-of-way      |2020-09-22 16:30:00.000|2021-11-26 16:30:00.000|         430 days|
+parked motor vehicle|improper backing                   |2021-07-15 19:00:00.000|2022-08-31 11:25:00.000|411 days 16:25:00|
 
 
 -- What is the least amount of difference between crash date and the date it was reported?
 
 SELECT
 	first_crash_type,
+	primary_cause,
 	crash_date AS crash_date,
 	date_police_notified,
 	date_police_notified - crash_date AS date_difference
 FROM
 	crash_timeline
 ORDER BY
-	date_difference DESC
+	date_difference
 LIMIT 10;
 
 
