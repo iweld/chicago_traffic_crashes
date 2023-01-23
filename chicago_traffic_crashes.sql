@@ -458,9 +458,21 @@ rear end                    |failing to reduce speed to avoid crash|2022-07-15 1
 pedestrian                  |driving skills/knowledge/experience   |2019-12-03 14:22:00.000|2019-12-03 14:23:00.000|       00:01:00|
 angle                       |disregarding stop sign                |2022-04-27 06:57:00.000|2022-04-27 06:58:00.000|       00:01:00|
 
+-- What is the average and median date difference?
 
+SELECT
+	 avg(date_police_notified - crash_date) AS avg_date_difference,
+	 PERCENTILE_CONT(0.5) WITHIN GROUP(ORDER BY (date_police_notified - crash_date)) AS median_date_diff
+FROM
+	crash_timeline
+WHERE
+	(date_police_notified - crash_date) > '00:00:00';
 
+-- Results:
 
+avg_date_difference|mean_date_diff|
+-------------------+--------------+
+    14:52:31.517892|      00:35:00|
 
 
 
