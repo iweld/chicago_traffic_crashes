@@ -474,6 +474,36 @@ avg_date_difference|mean_date_diff|
 -------------------+--------------+
     14:52:31.517892|      00:35:00|
     
+-- What are the type 5 Crash Types?
+    
+WITH get_crash_type AS (    
+	SELECT
+		first_crash_type,
+		count(*) AS crash_count,
+		RANK() OVER (ORDER BY count(*) desc) AS rnk
+	FROM
+		crash_timeline
+	GROUP BY
+		first_crash_type
+)
+SELECT
+	first_crash_type AS crash_type,
+	crash_count
+FROM
+	get_crash_type
+WHERE
+	rnk <= 5;
+
+-- Results:
+
+crash_type              |crash_count|
+------------------------+-----------+
+parked motor vehicle    |     147481|
+rear end                |     140314|
+sideswipe same direction|      93799|
+turning                 |      89882|
+angle                   |      68282|
+    
 
 
     
