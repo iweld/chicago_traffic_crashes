@@ -562,7 +562,46 @@ crash_date             |work_zone|work_zone_type|workers_present|
 2018-11-01 17:30:00.000|y        |construction  |y              |
 2018-10-09 11:15:00.000|y        |construction  |n              |
 
+-- Most dangerous hour
 
+SELECT
+	crash_hour,
+	count(*) as hour_count
+FROM
+	crash_timeline
+GROUP BY 
+	crash_hour
+ORDER BY
+	hour_count desc;
+
+-- Results:
+
+crash_hour|hour_count|
+----------+----------+
+16        |     47964|
+15        |     47800|
+17        |     46679|
+14        |     41977|
+18        |     38546|
+13        |     38240|
+12        |     37316|
+8         |     32694|
+11        |     32221|
+9         |     28892|
+10        |     28799|
+19        |     28627|
+7         |     26186|
+20        |     23190|
+21        |     20769|
+22        |     19077|
+23        |     16612|
+0         |     13914|
+6         |     13717|
+1         |     11811|
+2         |     10129|
+5         |      8803|
+3         |      8278|
+4         |      7393|
 
 
 
