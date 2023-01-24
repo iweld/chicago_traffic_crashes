@@ -534,6 +534,34 @@ following too closely        |      61228|
 not applicable               |      32773|
 improper overtaking/passing  |      30107|
 
+-- Explore workzone data
+
+SELECT
+	crash_date,
+	work_zone,                  
+	work_zone_type,              
+	workers_present
+FROM
+	crash_timeline
+WHERE
+	work_zone IS NOT NULL
+LIMIT 10;
+
+-- Results:
+
+crash_date             |work_zone|work_zone_type|workers_present|
+-----------------------+---------+--------------+---------------+
+2018-12-12 09:30:00.000|y        |construction  |y              |
+2017-09-02 08:00:00.000|n        |              |               |
+2019-02-02 18:02:00.000|y        |construction  |               |
+2021-08-27 15:49:00.000|n        |              |               |
+2019-07-19 10:56:00.000|y        |construction  |n              |
+2022-07-30 01:12:00.000|n        |              |               |
+2019-06-15 18:25:00.000|y        |construction  |               |
+2022-07-16 13:10:00.000|y        |construction  |               |
+2018-11-01 17:30:00.000|y        |construction  |y              |
+2018-10-09 11:15:00.000|y        |construction  |n              |
+
 
 
 
