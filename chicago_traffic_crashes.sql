@@ -524,7 +524,15 @@ FROM
 WHERE
 	rnk <= 5;
 
+-- Results:
 
+primary_cause                |cause_count|
+-----------------------------+-----------+
+unable to determine          |     241832|
+failing to yield right-of-way|      69545|
+following too closely        |      61228|
+not applicable               |      32773|
+improper overtaking/passing  |      30107|
 
 
 
