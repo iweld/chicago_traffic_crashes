@@ -660,7 +660,22 @@ pedestrians_hit|
 ---------------+
           15121|
 
+-- How many hit a pedestrian with a fatality?
 
+SELECT
+	count(*) AS pedestrians_hit_fatality
+FROM
+	crash_timeline
+WHERE
+	first_crash_type = 'pedestrian'
+AND
+	injuries_fatal <> '0';
+
+-- Results:
+
+pedestrians_hit_fatality|
+------------------------+
+                     181|
     
 
 
