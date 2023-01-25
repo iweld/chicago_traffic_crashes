@@ -637,7 +637,13 @@ FROM
 GROUP BY
 	damage;
 
+-- Results:
 
+damage       |damage_count|
+-------------+------------+
+$500 or less |       74095|
+$501 - $1,500|      169453|
+over $1,500  |      386086|
 
 
 
