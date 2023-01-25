@@ -603,7 +603,17 @@ crash_hour|hour_count|
 3         |      8278|
 4         |      7393|
 
+-- How many road defects caused crashes?
 
+SELECT
+	road_defect,
+	count(*) AS defect_count
+from
+	crash_timeline
+GROUP BY
+	road_defect
+ORDER BY 
+	defect_count desc;
 
 
 
