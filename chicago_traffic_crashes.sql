@@ -627,12 +627,15 @@ worn surface     |        2511|
 shoulder defect  |        1229|
 debris on roadway|         493|
 
--- What types ofd damage?
+-- What types of damage?
 
 SELECT
-	DISTINCT damage
+	damage,
+	count(*) AS damage_count
 FROM
-	crash_timeline;
+	crash_timeline
+GROUP BY
+	damage;
 
 
 
