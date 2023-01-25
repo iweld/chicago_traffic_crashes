@@ -645,7 +645,20 @@ $500 or less |       74095|
 $501 - $1,500|      169453|
 over $1,500  |      386086|
 
+-- How many hit a pedestrian?
 
+SELECT
+	count(*) AS pedestrians_hit
+FROM
+	crash_timeline
+WHERE
+	first_crash_type = 'pedestrian';
+
+-- Results:
+
+pedestrians_hit|
+---------------+
+          15121|
 
 
     
