@@ -615,6 +615,18 @@ GROUP BY
 ORDER BY 
 	defect_count desc;
 
+-- Results:
+
+road_defect      |defect_count|
+-----------------+------------+
+no defects       |      515811|
+unknown          |      101142|
+rut, holes       |        4960|
+other            |        3488|
+worn surface     |        2511|
+shoulder defect  |        1229|
+debris on roadway|         493|
+
 
 
 
