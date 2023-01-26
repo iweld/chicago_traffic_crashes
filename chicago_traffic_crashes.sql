@@ -691,7 +691,26 @@ GROUP BY
 ORDER BY
 	fatality_count desc;
     
+-- Results:
 
+first_crash_type            |fatality_count|
+----------------------------+--------------+
+pedestrian                  |           181|
+fixed object                |           181|
+angle                       |            82|
+parked motor vehicle        |            78|
+turning                     |            55|
+head on                     |            34|
+pedalcyclist                |            30|
+rear end                    |            30|
+sideswipe same direction    |            19|
+other object                |            13|
+other noncollision          |             4|
+sideswipe opposite direction|             4|
+animal                      |             4|
+overturned                  |             3|
+rear to front               |             2|
+train                       |             1|
 
     
 
