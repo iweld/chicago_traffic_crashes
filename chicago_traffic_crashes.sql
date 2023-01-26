@@ -712,6 +712,26 @@ overturned                  |             3|
 rear to front               |             2|
 train                       |             1|
 
+SELECT
+	first_crash_type,
+	count(*) AS fatality_count,
+	DENSE_RANK() OVER (ORDER BY count(*) desc) AS rnk
+FROM
+	crash_timeline
+WHERE
+	injuries_fatal <> '0'
+GROUP BY 
+	first_crash_type;
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
     
 
 
