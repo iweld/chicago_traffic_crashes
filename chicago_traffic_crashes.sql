@@ -726,11 +726,14 @@ WITH get_same_rank AS (
 		first_crash_type
 )
 SELECT
-	first_crash_type,
-	fatality_count
+	g1.first_crash_type,
+	g1.fatality_count
 FROM
-	get_same_rank
-ORDER BY rnk
+	get_same_rank AS g1
+ORDER BY
+	g1.rnk;
+
+
 	
 	
 	
