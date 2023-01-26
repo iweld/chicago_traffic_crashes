@@ -676,6 +676,20 @@ AND
 pedestrians_hit_fatality|
 ------------------------+
                      181|
+                     
+-- What type of crashes cause fatalities and what is their count?
+                     
+SELECT 
+	first_crash_type,
+	count(*) AS fatality_count
+FROM
+	crash_timeline
+WHERE
+	injuries_fatal <> '0'
+GROUP BY
+	first_crash_type
+ORDER BY
+	fatality_count desc;
     
 
 
