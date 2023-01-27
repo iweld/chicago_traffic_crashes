@@ -752,6 +752,22 @@ AND
 count|
 -----+
    12|
+   
+SELECT
+	crash_day_of_week,
+	count(*) AS day_count
+FROM
+	crash_timeline
+WHERE
+	injuries_fatal <> '0'
+AND 
+	hit_and_run = 'y'
+AND 
+	first_crash_type = 'pedalcyclist'
+GROUP BY
+	crash_day_of_week
+ORDER BY
+	day_count;
 
 
 	
