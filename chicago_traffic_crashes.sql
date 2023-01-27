@@ -734,6 +734,25 @@ overturned                  |             3|
 rear to front               |             2|
 train                       |             1|
 
+-- Query fatal crashes involving pedalcyclist
+
+SELECT
+	count(*)
+FROM
+	crash_timeline
+WHERE
+	injuries_fatal <> '0'
+AND 
+	hit_and_run = 'y'
+AND 
+	first_crash_type = 'pedalcyclist';
+
+-- Results:
+
+count|
+-----+
+   12|
+
 
 	
 	
