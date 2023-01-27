@@ -780,6 +780,21 @@ friday           |        1|
 saturday         |        1|
 wednesday        |        1|
 
+-- What are the deadlist streets in crashes?
+
+SELECT
+	street_name,
+	count(*) AS street_count
+FROM
+	crash_timeline
+WHERE
+	injuries_fatal <> '0'
+GROUP BY
+	street_name
+ORDER BY
+	street_count DESC
+LIMIT 10;
+
 
 	
 	
