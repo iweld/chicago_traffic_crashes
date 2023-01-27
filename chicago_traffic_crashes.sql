@@ -767,18 +767,18 @@ AND
 GROUP BY
 	crash_day_of_week
 ORDER BY
-	day_count;
+	day_count DESC;
 
 -- Results:
 
 crash_day_of_week|day_count|
 -----------------+---------+
+sunday           |        4|
+thursday         |        3|
+monday           |        2|
 friday           |        1|
 saturday         |        1|
 wednesday        |        1|
-monday           |        2|
-thursday         |        3|
-sunday           |        4|
 
 
 	
