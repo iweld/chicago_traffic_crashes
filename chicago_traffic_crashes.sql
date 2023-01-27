@@ -795,6 +795,21 @@ ORDER BY
 	street_count DESC
 LIMIT 10;
 
+-- Results:
+
+street_name      |street_count|
+-----------------+------------+
+Ashland Ave      |          24|
+Cicero Ave       |          23|
+Western Ave      |          21|
+Pulaski Rd       |          21|
+Halsted St       |          20|
+Archer Ave       |          16|
+Lake Shore Dr Nb |          16|
+Kedzie Ave       |          14|
+Cottage Grove Ave|          14|
+Lake Shore Dr Sb |          13|
+
 
 	
 	
