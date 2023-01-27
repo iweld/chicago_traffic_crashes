@@ -769,6 +769,17 @@ GROUP BY
 ORDER BY
 	day_count;
 
+-- Results:
+
+crash_day_of_week|day_count|
+-----------------+---------+
+friday           |        1|
+saturday         |        1|
+wednesday        |        1|
+monday           |        2|
+thursday         |        3|
+sunday           |        4|
+
 
 	
 	
