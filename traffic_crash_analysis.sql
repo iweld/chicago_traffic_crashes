@@ -54,3 +54,41 @@
 
 */
 
+-- What is the total count of recorded crashes in the dataset?
+
+SELECT
+	count(*) AS record_count
+FROM
+	crashes;
+	
+-- Results:
+
+record_count|
+------------+
+      686276|
+
+-- What is the earliest and latest date?
+
+SELECT 
+	min(crash_date) AS earliest_date,
+	max(crash_date) AS latest_date
+FROM	
+	crashes;
+
+-- Results:
+
+min                    |max                    |
+-----------------------+-----------------------+
+2013-03-03 16:48:00.000|2023-01-12 23:36:00.000|
+
+-- What is the number of reported crashes per year?
+
+SELECT
+	EXTRACT(YEAR FROM crash_date) AS crash_year,
+	count(*) AS reported_crashes
+FROM
+	crashes
+GROUP BY
+	crash_year
+ORDER BY 
+	crash_year;
