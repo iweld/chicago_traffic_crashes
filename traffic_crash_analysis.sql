@@ -188,11 +188,13 @@ min_date               |max_date               |
 SELECT
 	count(*) AS record_count
 FROM
-	crashes;
+	crash_timeline;
 	
 -- Results:
 
-
+record_count|
+------------+
+      545848|
 
 
 
