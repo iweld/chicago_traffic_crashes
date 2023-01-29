@@ -108,3 +108,64 @@ crash_year|reported_crashes|
     2021.0|          108756|
     2022.0|          108292|
     2023.0|            2509|
+    
+-- 2017 appears to be the first year with the most complete data but there appears to be missing data.
+-- Lets take a look at 2017 data to see if we notice anything wrong.
+    
+SELECT
+	EXTRACT(YEAR FROM crash_date) AS crash_year,
+	crash_month,
+	count(*)
+FROM
+	crashes
+WHERE
+	EXTRACT(YEAR FROM crash_date) = '2017.0'
+OR
+	EXTRACT(YEAR FROM crash_date) = '2018.0'
+GROUP BY
+	crash_year,
+	crash_month
+ORDER BY
+	crash_month;
+
+-- Results:
+
+crash_year|crash_month|count|
+----------+-----------+-----+
+    2017.0|1          | 4363|
+    2018.0|1          | 9532|
+    2017.0|10         |10022|
+    2018.0|10         |10402|
+    2017.0|11         | 9515|
+    2018.0|11         | 9474|
+    2017.0|12         |10108|
+    2018.0|12         |10021|
+    2017.0|2          | 4109|
+    2018.0|2          | 8729|
+    2017.0|3          | 5105|
+    2018.0|3          | 9319|
+    2017.0|4          | 5024|
+    2018.0|4          | 9648|
+    2017.0|5          | 5847|
+    2018.0|5          |10714|
+    2017.0|6          | 6212|
+    2018.0|6          |10601|
+    2017.0|7          | 6758|
+    2018.0|7          |10367|
+    2017.0|8          | 7685|
+    2018.0|8          |10212|
+    2017.0|9          | 9038|
+    2018.0|9          | 9931|
+
+-- After a simple we can conclude that 2017 is incomplete and not going to be used in our analysis.
+
+
+
+
+
+
+
+
+
+
+
