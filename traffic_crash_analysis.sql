@@ -183,7 +183,14 @@ min_date               |max_date               |
 -----------------------+-----------------------+
 2018-01-01 00:00:00.000|2022-12-31 23:59:00.000|
 
+-- What is the total count of records in the Temp table?
 
+SELECT
+	count(*) AS record_count
+FROM
+	crashes;
+	
+-- Results:
 
 
 
