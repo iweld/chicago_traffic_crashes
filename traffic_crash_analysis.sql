@@ -158,8 +158,30 @@ crash_year|crash_month|count|
     2018.0|9          | 9931|
 
 -- After a simple we can conclude that 2017 is incomplete and not going to be used in our analysis.
+-- Create a temp table with only crashes betweeon 2017 and 2022
+    
+DROP TABLE IF EXISTS crash_timeline;
+CREATE TEMP TABLE crash_timeline AS
+(
+	SELECT
+		*
+	FROM
+		crashes
+	WHERE
+		EXTRACT(YEAR FROM crash_date) between '2018.0' AND '2022.0'
+);
 
+SELECT
+	min(crash_date) AS min_date,
+	max(crash_date) AS max_date
+FROM
+	crash_timeline;
 
+-- Results:
+
+min_date               |max_date               |
+-----------------------+-----------------------+
+2018-01-01 00:00:00.000|2022-12-31 23:59:00.000|
 
 
 
