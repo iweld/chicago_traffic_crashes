@@ -200,22 +200,24 @@ record_count|
 
 SELECT
 	lighting_condition,
-	count(*)
+	count(*) AS crash_count
 FROM
 	crash_timeline
 GROUP BY
-	lighting_condition;
+	lighting_condition
+ORDER BY
+	crash_count desc;
 
 -- Results:
 
-lighting_condition    |count|
-----------------------+-----+
-darkness, lighted road|  368|
-unknown               |    6|
-dawn                  |   13|
-dusk                  |   23|
-daylight              |  269|
-darkness              |   42|
+lighting_condition    |crash_count|
+----------------------+-----------+
+daylight              |     350241|
+darkness, lighted road|     122916|
+darkness              |      25282|
+unknown               |      22509|
+dusk                  |      15600|
+dawn                  |       9300|
 
 
 
