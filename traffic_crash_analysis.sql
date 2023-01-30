@@ -196,7 +196,26 @@ record_count|
 ------------+
       545848|
 
+-- What are the different types of lighting conditions and the number of crashes?
 
+SELECT
+	lighting_condition,
+	count(*)
+FROM
+	crash_timeline
+GROUP BY
+	lighting_condition;
+
+-- Results:
+
+lighting_condition    |count|
+----------------------+-----+
+darkness, lighted road|  368|
+unknown               |    6|
+dawn                  |   13|
+dusk                  |   23|
+daylight              |  269|
+darkness              |   42|
 
 
 
