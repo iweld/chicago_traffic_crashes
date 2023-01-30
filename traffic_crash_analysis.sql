@@ -199,7 +199,7 @@ record_count|
 -- What are the different types of lighting conditions and the number of crashes?
 
 SELECT
-	lighting_condition,
+	DISTINCT lighting_condition,
 	count(*) AS crash_count
 FROM
 	crash_timeline
@@ -219,5 +219,27 @@ unknown               |      22509|
 dusk                  |      15600|
 dawn                  |       9300|
 
+-- What are the different kinds of road conditions and crash count?
 
+SELECT
+	DISTINCT roadway_surface_condition,
+	count(*) AS crash_count
+FROM
+	crash_timeline
+GROUP BY
+	roadway_surface_condition
+ORDER BY
+	crash_count DESC;
+
+-- Results:
+
+roadway_surface_condition|crash_count|
+-------------------------+-----------+
+dry                      |     403694|
+wet                      |      72751|
+unknown                  |      42152|
+snow or slush            |      21557|
+ice                      |       4060|
+other                    |       1433|
+sand, mud, dirt          |        201|
 
