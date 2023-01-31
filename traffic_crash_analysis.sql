@@ -248,8 +248,8 @@ sand, mud, dirt          |        201|
 SELECT
 	first_crash_type,
 	primary_cause,
-	crash_date,
-	date_police_notified,
+	lighting_condition,
+	roadway_surface_condition,
 	crash_date - date_police_notified AS date_diff
 FROM
 	crash_timeline
@@ -259,16 +259,16 @@ LIMIT 10;
 
 -- Results:
 
-first_crash_type    |primary_cause                    |crash_date             |date_police_notified   |date_diff          |
---------------------+---------------------------------+-----------------------+-----------------------+-------------------+
-rear end            |unable to determine              |2020-05-10 13:15:00.000|2022-05-11 11:00:00.000|-730 days -21:45:00|
-rear end            |unable to determine              |2020-10-30 20:00:00.000|2022-10-30 20:00:00.000|          -730 days|
-fixed object        |unable to determine              |2019-02-19 14:44:00.000|2021-01-21 14:50:00.000|-702 days -00:06:00|
-fixed object        |road construction/maintenance    |2018-10-19 13:00:00.000|2020-03-07 19:15:00.000|-505 days -06:15:00|
-parked motor vehicle|unable to determine              |2018-11-13 01:00:00.000|2020-02-10 14:04:00.000|-454 days -13:04:00|
-rear end            |failing to yield right-of-way    |2020-09-22 16:30:00.000|2021-11-26 16:30:00.000|          -430 days|
-parked motor vehicle|improper backing                 |2021-07-15 19:00:00.000|2022-08-31 11:25:00.000|-411 days -16:25:00|
-fixed object        |road construction/maintenance    |2019-01-23 10:30:00.000|2020-03-07 18:10:00.000|-409 days -07:40:00|
-fixed object        |unable to determine              |2018-01-29 18:30:00.000|2019-02-07 20:15:00.000|-374 days -01:45:00|
-rear end            |distraction - from inside vehicle|2018-04-28 16:46:00.000|2019-05-04 12:30:00.000|-370 days -19:44:00|
+first_crash_type    |primary_cause                    |lighting_condition    |roadway_surface_condition|date_diff          |
+--------------------+---------------------------------+----------------------+-------------------------+-------------------+
+rear end            |unable to determine              |daylight              |dry                      |-730 days -21:45:00|
+rear end            |unable to determine              |daylight              |unknown                  |          -730 days|
+fixed object        |unable to determine              |daylight              |dry                      |-702 days -00:06:00|
+fixed object        |road construction/maintenance    |daylight              |wet                      |-505 days -06:15:00|
+parked motor vehicle|unable to determine              |darkness, lighted road|dry                      |-454 days -13:04:00|
+rear end            |failing to yield right-of-way    |daylight              |dry                      |          -430 days|
+parked motor vehicle|improper backing                 |daylight              |dry                      |-411 days -16:25:00|
+fixed object        |road construction/maintenance    |daylight              |wet                      |-409 days -07:40:00|
+fixed object        |unable to determine              |darkness, lighted road|wet                      |-374 days -01:45:00|
+rear end            |distraction - from inside vehicle|daylight              |dry                      |-370 days -19:44:00|
 
