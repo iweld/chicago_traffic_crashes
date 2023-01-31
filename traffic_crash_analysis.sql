@@ -272,3 +272,31 @@ fixed object        |road construction/maintenance    |daylight              |we
 fixed object        |unable to determine              |darkness, lighted road|wet                      |-374 days -01:45:00|
 rear end            |distraction - from inside vehicle|daylight              |dry                      |-370 days -19:44:00|
 
+-- What is the average and median date difference?
+
+SELECT
+	 avg(date_police_notified - crash_date) AS avg_date_difference,
+	 PERCENTILE_CONT(0.5) WITHIN GROUP(ORDER BY (date_police_notified - crash_date)) AS median_date_diff
+FROM
+	crash_timeline
+WHERE
+	(date_police_notified - crash_date) > '00:00:00';
+
+-- Results:
+
+avg_date_difference|median_date_diff|
+-------------------+----------------+
+    14:33:38.825155|        00:35:00|
+
+
+
+
+
+
+
+
+
+
+
+
+
