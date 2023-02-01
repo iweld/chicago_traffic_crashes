@@ -318,7 +318,46 @@ sideswipe same direction|      80109|
 turning                 |      78399|
 angle                   |      59406|
 
+-- Most dangerous hour
 
+SELECT
+	crash_hour,
+	count(*) as hour_count
+FROM
+	crash_timeline
+GROUP BY 
+	crash_hour
+ORDER BY
+	crash_hour::int asc;
+
+-- Results:
+
+crash_hour|hour_count|
+----------+----------+
+0         |     12368|
+1         |     10490|
+2         |      8934|
+3         |      7354|
+4         |      6543|
+5         |      7685|
+6         |     11778|
+7         |     22233|
+8         |     27969|
+9         |     24783|
+10        |     24928|
+11        |     28023|
+12        |     32337|
+13        |     33064|
+14        |     36388|
+15        |     41462|
+16        |     41479|
+17        |     40324|
+18        |     33211|
+19        |     24833|
+20        |     20342|
+21        |     18100|
+22        |     16598|
+23        |     14622|
 
 
 
