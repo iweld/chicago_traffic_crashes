@@ -287,6 +287,37 @@ WHERE
 avg_date_difference|median_date_diff|
 -------------------+----------------+
     14:33:38.825155|        00:35:00|
+    
+-- What are the top 5 Crash Types?
+    
+WITH get_crash_type AS (    
+	SELECT
+		first_crash_type,
+		count(*) AS crash_count,
+		RANK() OVER (ORDER BY count(*) desc) AS rnk
+	FROM
+		crash_timeline
+	GROUP BY
+		first_crash_type,
+		primary_cause
+)
+SELECT
+	first_crash_type AS crash_type,
+	crash_count
+FROM
+	get_crash_type
+WHERE
+	rnk <= 5;
+
+-- Results:
+
+crash_type              |crash_count|
+------------------------+-----------+
+parked motor vehicle    |      74978|
+rear end                |      44775|
+rear end                |      38370|
+sideswipe same direction|      28737|
+turning                 |      21376|
 
 
 
