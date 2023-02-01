@@ -298,8 +298,7 @@ WITH get_crash_type AS (
 	FROM
 		crash_timeline
 	GROUP BY
-		first_crash_type,
-		primary_cause
+		first_crash_type
 )
 SELECT
 	first_crash_type AS crash_type,
@@ -313,11 +312,11 @@ WHERE
 
 crash_type              |crash_count|
 ------------------------+-----------+
-parked motor vehicle    |      74978|
-rear end                |      44775|
-rear end                |      38370|
-sideswipe same direction|      28737|
-turning                 |      21376|
+parked motor vehicle    |     128858|
+rear end                |     118761|
+sideswipe same direction|      80109|
+turning                 |      78399|
+angle                   |      59406|
 
 
 
