@@ -361,27 +361,36 @@ crash_hour|hour_count|
 
 -- How many road defects caused crashes?
 
+WITH all_road_defects AS (
+	SELECT
+		road_defect,
+		count(*) AS defect_count
+	from
+		crash_timeline
+	GROUP BY
+		road_defect
+	ORDER BY 
+		defect_count DESC
+)
 SELECT
 	road_defect,
-	count(*) AS defect_count
-from
-	crash_timeline
-GROUP BY
-	road_defect
-ORDER BY 
-	defect_count desc;
+	defect_count,
+	round(100 * ((defect_count * 1.0) / (SELECT count(*) FROM crash_timeline)), 1) AS avg_of_total
+FROM
+	all_road_defects
+	
 
 -- Results:
 
-road_defect      |defect_count|
------------------+------------+
-no defects       |      445069|
-unknown          |       89942|
-rut, holes       |        4219|
-other            |        3036|
-worn surface     |        2154|
-shoulder defect  |        1009|
-debris on roadway|         419|
+road_defect      |defect_count|avg_of_total|
+-----------------+------------+------------+
+no defects       |      445069|        81.5|
+unknown          |       89942|        16.5|
+rut, holes       |        4219|         0.8|
+other            |        3036|         0.6|
+worn surface     |        2154|         0.4|
+shoulder defect  |        1009|         0.2|
+debris on roadway|         419|         0.1|
 
 
 
