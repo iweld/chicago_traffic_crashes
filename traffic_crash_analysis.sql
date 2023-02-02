@@ -359,6 +359,29 @@ crash_hour|hour_count|
 22        |     16598|
 23        |     14622|
 
+-- How many road defects caused crashes?
+
+SELECT
+	road_defect,
+	count(*) AS defect_count
+from
+	crash_timeline
+GROUP BY
+	road_defect
+ORDER BY 
+	defect_count desc;
+
+-- Results:
+
+road_defect      |defect_count|
+-----------------+------------+
+no defects       |      445069|
+unknown          |       89942|
+rut, holes       |        4219|
+other            |        3036|
+worn surface     |        2154|
+shoulder defect  |        1009|
+debris on roadway|         419|
 
 
 
