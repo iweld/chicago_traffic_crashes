@@ -402,15 +402,25 @@ debris on roadway|         419|         0.1|
 
 -- What is the average count per day of the week?
 
+WITH weekday_crash AS (
+	SELECT
+		crash_day_of_week,
+		count(*) AS day_count
+	FROM
+		crash_timeline
+	GROUP BY
+		crash_day_of_week
+	ORDER BY
+		day_count DESC
+)
 SELECT
 	crash_day_of_week,
-	count(*) AS day_count,
+	day_count,
+	round(100 * ((day_count * 1.0) / (SELECT count(*) FROM crash_timeline)), 1) AS avg_of_total
 FROM
-	crash_timeline
-GROUP BY
-	crash_day_of_week
-ORDER BY
-	day_count DESC;
+	weekday_crash;
+
+
 
 
 
