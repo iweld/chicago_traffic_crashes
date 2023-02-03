@@ -320,15 +320,23 @@ angle                   |      59406|
 
 -- Most dangerous hour
 
+WITH most_dangerous_hour AS (
+	SELECT
+		crash_hour,
+		count(*) as hour_count
+	FROM
+		crash_timeline
+	GROUP BY 
+		crash_hour
+	ORDER BY
+		crash_hour::int ASC
+)
 SELECT
 	crash_hour,
-	count(*) as hour_count
+	hour_count,
+	round(100 * ((hour_count * 1.0) / (SELECT count(*) FROM crash_timeline)), 1) AS avg_of_total
 FROM
-	crash_timeline
-GROUP BY 
-	crash_hour
-ORDER BY
-	crash_hour::int asc;
+	most_dangerous_hour;
 
 -- Results:
 
