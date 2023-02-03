@@ -420,7 +420,17 @@ SELECT
 FROM
 	weekday_crash;
 
+-- Results:
 
+crash_day_of_week|day_count|avg_of_total|
+-----------------+---------+------------+
+friday           |    88742|        16.3|
+saturday         |    81323|        14.9|
+thursday         |    78138|        14.3|
+tuesday          |    77316|        14.2|
+wednesday        |    76740|        14.1|
+monday           |    75375|        13.8|
+sunday           |    68214|        12.5|
 
 
 
