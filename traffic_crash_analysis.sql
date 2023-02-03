@@ -400,7 +400,17 @@ worn surface     |        2154|         0.4|
 shoulder defect  |        1009|         0.2|
 debris on roadway|         419|         0.1|
 
+-- What is the average count per day of the week?
 
+SELECT
+	crash_day_of_week,
+	count(*) AS day_count,
+FROM
+	crash_timeline
+GROUP BY
+	crash_day_of_week
+ORDER BY
+	day_count DESC;
 
 
 
