@@ -195,22 +195,6 @@ FROM
 record_count|
 ------------+
       545848|
-      
--- What is the average and median date difference?
-
-SELECT
-	 avg(date_police_notified - crash_date) AS avg_date_difference,
-	 PERCENTILE_CONT(0.5) WITHIN GROUP(ORDER BY (date_police_notified - crash_date)) AS median_date_diff
-FROM
-	crash_timeline
-WHERE
-	(date_police_notified - crash_date) > '00:00:00';
-
--- Results:
-
-avg_date_difference|mean_date_diff|
--------------------+--------------+
-    14:52:31.517892|      00:35:00|
 
 -- What are the different types of lighting conditions and the number of crashes?
 
@@ -415,6 +399,36 @@ other            |        3036|         0.6|
 worn surface     |        2154|         0.4|
 shoulder defect  |        1009|         0.2|
 debris on roadway|         419|         0.1|
+
+-- What are the top 5 Crash Types?
+    
+WITH get_primary_cause AS (    
+	SELECT
+		primary_cause,
+		count(*) AS cause_count,
+		RANK() OVER (ORDER BY count(*) desc) AS rnk
+	FROM
+		crash_timeline
+	GROUP BY
+		primary_cause
+)
+SELECT
+	primary_cause,
+	cause_count
+FROM
+	get_primary_cause
+WHERE
+	rnk <= 5;
+
+-- Results:
+
+primary_cause                |cause_count|
+-----------------------------+-----------+
+unable to determine          |     211228|
+failing to yield right-of-way|      59735|
+following too closely        |      51273|
+not applicable               |      28703|
+improper overtaking/passing  |      26162|
 
 -- What is the average count per day of the week?
 
