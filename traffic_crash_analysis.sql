@@ -412,6 +412,9 @@ WITH weekday_crash AS (
 		crash_day_of_week
 	ORDER BY
 		day_count DESC
+),
+get_fatalities AS (
+
 )
 SELECT
 	crash_day_of_week,
@@ -432,7 +435,35 @@ wednesday        |    76740|        14.1|
 monday           |    75375|        13.8|
 sunday           |    68214|        12.5|
 
+-- What are the top 10 deadliest streets?
 
+SELECT
+	street_name,
+	count(*) AS street_count
+FROM
+	crash_timeline
+WHERE
+	injuries_fatal <> '0'
+GROUP BY
+	street_name
+ORDER BY
+	street_count DESC
+LIMIT 10;
+
+-- Results:
+
+street_name     |street_count|
+----------------+------------+
+Cicero Ave      |          23|
+Ashland Ave     |          21|
+Western Ave     |          20|
+Pulaski Rd      |          19|
+Halsted St      |          17|
+Archer Ave      |          14|
+Lake Shore Dr Nb|          14|
+Kedzie Ave      |          12|
+Lake Shore Dr Sb|          12|
+Stony Island Ave|          12|
 
 
 
