@@ -430,7 +430,8 @@ SELECT
 	wc.crash_day_of_week,
 	wc.day_count,
 	gf.fatality_count,
-	round(100 * ((wc.day_count * 1.0) / (SELECT count(*) FROM crash_timeline)), 1) AS avg_of_total
+	round(100 * ((wc.day_count * 1.0) / (SELECT count(*) FROM crash_timeline)), 1) AS avg_of_total,
+	round(100 * ((gf.fatality_count * 1.0) / (SELECT count(*) FROM crash_timeline)), 3) AS avg_of_fatalities
 FROM
 	weekday_crash AS wc
 LEFT JOIN 
@@ -439,15 +440,15 @@ ON wc.crash_day_of_week = gf.crash_day_of_week;
 
 -- Results:
 
-crash_day_of_week|day_count|fatality_count|avg_of_total|
------------------+---------+--------------+------------+
-friday           |    88742|            84|        16.3|
-saturday         |    81323|           103|        14.9|
-thursday         |    78138|           100|        14.3|
-tuesday          |    77316|            58|        14.2|
-wednesday        |    76740|            93|        14.1|
-monday           |    75375|            86|        13.8|
-sunday           |    68214|           119|        12.5|
+crash_day_of_week|day_count|fatality_count|avg_of_total|avg_of_fatalities|
+-----------------+---------+--------------+------------+-----------------+
+friday           |    88742|            84|        16.3|            0.015|
+saturday         |    81323|           103|        14.9|            0.019|
+thursday         |    78138|           100|        14.3|            0.018|
+tuesday          |    77316|            58|        14.2|            0.011|
+wednesday        |    76740|            93|        14.1|            0.017|
+monday           |    75375|            86|        13.8|            0.016|
+sunday           |    68214|           119|        12.5|            0.022|
 
 -- What are the top 10 deadliest streets?
 
