@@ -158,74 +158,45 @@ min_date               |max_date               |
 -----------------------|-----------------------|
 2018-01-01 00:00:00.000|2022-12-31 23:59:00.000|
 
-#### What month had the most crimes reported?
+#### What is the total count of records in the Temp table?
 
 ````sql
 SELECT
-	to_char(CRIME_DATE::timestamp, 'Month') AS month,
-	COUNT(*) AS n_crimes
+	count(*) AS record_count
 FROM
-	chicago_crimes
-GROUP BY
-	month
-ORDER BY
-	n_crimes DESC;
+	crash_timeline;
 ````
 
 **Results:**
 
-month    |n_crimes|
----------|--------|
-October  |   19018|
-September|   18987|
-July     |   18966|
-June     |   18566|
-August   |   18255|
-May      |   17539|
-November |   16974|
-January  |   16038|
-March    |   15742|
-April    |   15305|
-December |   14258|
-February |   12888|
+record_count|
+------------|
+545848|
 
-![Highest monthly crimes reported Chart](https://github.com/iweld/chicago_crime_and_weather_2021/blob/main/img/line_mild_to_cold.PNG)
-
-#### What month had the most homicides and what was the average and median temperature?
+#### What are the different types of lighting conditions and the number of crashes?
 
 ````sql
 SELECT
-	to_char(CRIME_DATE::timestamp, 'Month') AS month,
-	COUNT(*) AS n_homicides,
-	round(avg(temp_high), 1) AS avg_high_temp,
-	percentile_cont(0.5) WITHIN group(ORDER BY temp_high) AS median_temp
+	DISTINCT lighting_condition,
+	count(*) AS crash_count
 FROM
-	chicago_crimes
-WHERE crime_type = 'homicide'
+	crash_timeline
 GROUP BY
-	month
+	lighting_condition
 ORDER BY
-	n_homicides DESC;
+	crash_count desc;
 ````
 
 **Results:**
 
-month    |n_homicides|avg_high_temp|median_temp|
----------|-----------|-------------|-----------|
-July     |        112|         82.6|       82.0|
-September|         89|         80.8|       82.0|
-June     |         85|         83.5|       82.0|
-August   |         81|         85.3|       85.0|
-May      |         66|         73.9|       75.5|
-October  |         64|         67.9|       71.0|
-November |         62|         50.6|       51.0|
-January  |         55|         34.1|       34.0|
-April    |         54|         65.1|       62.0|
-December |         52|         48.6|       49.0|
-March    |         45|         54.7|       52.0|
-February |         38|         27.0|       26.0|
-
-![Monthly Homicide Bar Chart](https://github.com/iweld/chicago_crime_and_weather_2021/blob/main/img/bar_monthly_homicide.PNG)
+lighting_condition    |crash_count|
+----------------------|-----------|
+daylight              |     350241|
+darkness, lighted road|     122916|
+darkness              |      25282|
+unknown               |      22509|
+dusk                  |      15600|
+dawn                  |       9300|
 
 #### What weekday were most crimes committed?
 

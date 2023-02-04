@@ -116,7 +116,7 @@ WITH get_2017 AS (
 	SELECT
 		EXTRACT(YEAR FROM crash_date) AS crash_year,
 		crash_month::numeric,
-		count(*)
+		count(*) AS crash_count
 	FROM
 		crashes
 	WHERE
@@ -129,7 +129,7 @@ get_2018 AS (
 	SELECT
 		EXTRACT(YEAR FROM crash_date) AS crash_year,
 		crash_month::numeric,
-		count(*)
+		count(*) AS crash_count
 	FROM
 		crashes
 	WHERE
@@ -139,41 +139,36 @@ get_2018 AS (
 		crash_month
 )
 SELECT
-	to_char(g17.crash_month, 'Month')
+	DISTINCT g17.crash_month,
+	g17.crash_count AS "2017_count",
+	g18.crash_count AS "2018_count"
 FROM
 	get_2017 AS g17
+JOIN
+	get_2018 AS g18
+ON g17.crash_month = g18.crash_month
+ORDER BY
+	g17.crash_month::NUMERIC 
 	
 -- Results:
 
-crash_year|crash_month|count|
-----------+-----------+-----+
-    2017.0|1          | 4363|
-    2018.0|1          | 9532|
-    2017.0|10         |10022|
-    2018.0|10         |10402|
-    2017.0|11         | 9515|
-    2018.0|11         | 9474|
-    2017.0|12         |10108|
-    2018.0|12         |10021|
-    2017.0|2          | 4109|
-    2018.0|2          | 8729|
-    2017.0|3          | 5105|
-    2018.0|3          | 9319|
-    2017.0|4          | 5024|
-    2018.0|4          | 9648|
-    2017.0|5          | 5847|
-    2018.0|5          |10714|
-    2017.0|6          | 6212|
-    2018.0|6          |10601|
-    2017.0|7          | 6758|
-    2018.0|7          |10367|
-    2017.0|8          | 7685|
-    2018.0|8          |10212|
-    2017.0|9          | 9038|
-    2018.0|9          | 9931|
+crash_month|2017_count|2018_count|
+-----------+----------+----------+
+          1|      4363|      9532|
+          2|      4109|      8729|
+          3|      5105|      9319|
+          4|      5024|      9648|
+          5|      5847|     10714|
+          6|      6212|     10601|
+          7|      6758|     10367|
+          8|      7685|     10212|
+          9|      9038|      9931|
+         10|     10022|     10402|
+         11|      9515|      9474|
+         12|     10108|     10021|
 
--- After a simple analysis we can conclude that the 2017 data is incomplete and not going to be used in our analysis.
--- Create a temp table with only crashes between 2018 and 2022
+-- After a simple analysis we can conclude that the early 2017 data is incomplete and not going to be used in our analysis.
+-- Create a temp table with recorded crashes between 2018 and 2022 and check the record dates.
     
 DROP TABLE IF EXISTS crash_timeline;
 CREATE TEMP TABLE crash_timeline AS
@@ -234,7 +229,7 @@ unknown               |      22509|
 dusk                  |      15600|
 dawn                  |       9300|
 
--- What are the different kinds of road conditions and crash count?
+-- What are the different kinds of road conditions and the number of crashes?
 
 SELECT
 	DISTINCT roadway_surface_condition,
