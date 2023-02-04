@@ -23,145 +23,140 @@ total_records|
 -------------|
 686276|
 
-#### What is the count of Homicides, Battery and Assaults reported?
+#### What is the earliest and latest date of recorded crashes?
 
 ````sql
 SELECT 
-	crime_type,
-	count(*) AS n_crimes
-FROM 
-	crimes
-WHERE 
-	crime_type IN ('homicide', 'battery', 'assault')
-group BY 
-	crime_type
-order BY 
-	n_crimes DESC;
+	min(crash_date) AS earliest_date,
+	max(crash_date) AS latest_date
+FROM	
+	crashes;
 ````
 
 **Results:**
 
-crime_type|n_crimes|
-----------|--------|
-battery   |   39988|
-assault   |   20086|
-homicide  |     803|
+earliest_date          |latest_date            |
+-----------------------|-----------------------|
+2013-03-03 16:48:00.000|2023-01-12 23:36:00.000|
 
-#### Create a temp table that joins data from all three tables
+#### What is the number of reported crashes per year?
 
 ````sql
-DROP TABLE IF EXISTS chicago_crimes;
-CREATE TEMP TABLE chicago_crimes AS (
+SELECT
+	EXTRACT(YEAR FROM crash_date)::numeric AS crash_year,
+	count(*) AS reported_crashes
+FROM
+	crashes
+GROUP BY
+	crash_year
+ORDER BY 
+	crash_year;
+````
+
+**Results:**
+
+crash_year|reported_crashes|
+----------|----------------|
+2013|               2|
+2014|               6|
+2015|            9828|
+2016|           44297|
+2017|           83786|
+2018|          118950|
+2019|          117762|
+2020|           92088|
+2021|          108756|
+2022|          108292|
+2023|            2509|
+
+
+##### 2017 appears to be the first year with the most complete data but there appears to be missing data.  Lets take a look at 2017 data and compare to 2018 data to see if we notice any major inconsistancies.
+
+````sql
+WITH get_2017 AS (
 	SELECT
-		cr.crime_id, 
-		date_trunc('second', cr.crime_date) AS crime_date,
-		cr.crime_date::timestamp::time AS time_reported,
-		cr.crime_type,
-		cr.crime_description,
-		cr.location_description,
-		cr.street_name,
-		co.community_name,
-		co.population ,
-		co.area_size,
-		co.density,
-		cr.arrest, 
-		cr.domestic,
-		w.temp_high, 
-		w.temp_low, 
-		w.precipitation,
-		cr.latitude,
-		cr.longitude
-	FROM crimes AS cr
-	JOIN community AS co
-	ON cr.community_id = co.area_id
-	JOIN weather AS w
-	ON w.weather_date = date(cr.crime_date)
+		EXTRACT(YEAR FROM crash_date) AS crash_year,
+		crash_month::numeric,
+		count(*) AS crash_count
+	FROM
+		crashes
+	WHERE
+		EXTRACT(YEAR FROM crash_date) = '2017.0'
+	GROUP BY
+		crash_year,
+		crash_month
+),
+get_2018 AS (
+	SELECT
+		EXTRACT(YEAR FROM crash_date) AS crash_year,
+		crash_month::numeric,
+		count(*) AS crash_count
+	FROM
+		crashes
+	WHERE
+		EXTRACT(YEAR FROM crash_date) = '2018.0'
+	GROUP BY
+		crash_year,
+		crash_month
+)
+SELECT
+	DISTINCT g17.crash_month,
+	g17.crash_count AS "2017_count",
+	g18.crash_count AS "2018_count"
+FROM
+	get_2017 AS g17
+JOIN
+	get_2018 AS g18
+ON g17.crash_month = g18.crash_month
+ORDER BY
+	g17.crash_month::NUMERIC 
+````
+
+**Results:**
+
+crash_month|2017_count|2018_count|
+-----------|----------|----------|
+1|      4363|      9532|
+2|      4109|      8729|
+3|      5105|      9319|
+4|      5024|      9648|
+5|      5847|     10714|
+6|      6212|     10601|
+7|      6758|     10367|
+8|      7685|     10212|
+9|      9038|      9931|
+10|     10022|     10402|
+11|      9515|      9474|
+12|     10108|     10021|
+
+##### After a simple analysis we can conclude that the early 2017 data is incomplete and not going to be used in our analysis.
+
+#### Create a temp table with recorded crashes between 2018 and 2022.
+
+````sql
+DROP TABLE IF EXISTS crash_timeline;
+CREATE TEMP TABLE crash_timeline AS
+(
+	SELECT
+		*
+	FROM
+		crashes
+	WHERE
+		EXTRACT(YEAR FROM crash_date) between '2018.0' AND '2022.0'
 );
 
-SELECT * FROM chicago_crimes LIMIT 10;
+SELECT
+	min(crash_date) AS min_date,
+	max(crash_date) AS max_date
+FROM
+	crash_timeline;
 ````
 
 **Results:**
 
-crime_id|crime_date             |crime_type       |crime_description      |location_description|street_name      |community_name|population|area_size|density |arrest|domestic|temp_high|temp_low|precipitation|
---------|-----------------------|-----------------|-----------------------|--------------------|-----------------|--------------|----------|---------|--------|------|--------|---------|--------|-------------|
-1|2021-01-03 13:23:00.000|battery          |domestic battery simple|apartment           | eggleston ave   |englewood     |     24369|     3.07| 7937.79|false |true    |       33|      26|         0.01|
-2|2021-01-03 06:59:00.000|theft            |$500 and under         |residence           | yale ave        |chatham       |     31710|     2.95|10749.15|false |false   |       33|      26|         0.01|
-3|2021-01-03 00:20:00.000|battery          |domestic battery simple|apartment           | washington blvd |austin        |     96557|     7.15|13504.48|false |true    |       33|      26|         0.01|
-4|2021-01-03 20:47:00.000|narcotics        |possess - cocaine      |street              | racine ave      |west englewood|     29647|     3.15| 9411.75|true  |false   |       33|      26|         0.01|
-5|2021-01-03 20:09:00.000|homicide         |first degree murder    |street              | stony island ave|south shore   |     53971|     2.93|18420.14|false |false   |       33|      26|         0.01|
-6|2021-01-03 08:54:00.000|assault          |simple                 |cha apartment       | yates ave       |south deering |     14105|     10.9| 1294.04|false |false   |       33|      26|         0.01|
-7|2021-01-03 16:30:00.000|theft            |$500 and under         |apartment           | taylor st       |near west side|     67881|     5.69|11929.88|true  |true    |       33|      26|         0.01|
-8|2021-01-03 23:47:00.000|weapons violation|unlawful use - handgun |street              | 69th st         |south shore   |     53971|     2.93|18420.14|false |false   |       33|      26|         0.01|
-9|2021-01-03 22:30:00.000|criminal damage  |to property            |residence - garage  | thome ave       |edgewater     |     56296|     1.74|32354.02|false |false   |       33|      26|         0.01|
-10|2021-01-03 01:00:00.000|criminal trespass|to vehicle             |street              | blackstone ave  |hyde park     |     29456|     1.61|18295.65|false |false   |       33|      26|         0.01|
-
-
-#### What are the top ten communities that had the most crimes reported?
-##### We will also add the current population to see if area density is also a factor.
-
-````sql
-SELECT 
-	community_name AS community,
-	population,
-	density,
-	count(*) AS reported_crimes
-FROM chicago_crimes
-group BY 
-	community_name,
-	population,
-	density
-ORDER BY reported_crimes DESC
-LIMIT 10;
-````
-
-**Results:**
-
-community             |population|density |reported_crimes|
-----------------------|----------|--------|---------------|
-austin                |     96557|13504.48|          11341|
-near north side       |    105481|38496.72|           8126|
-south shore           |     53971|18420.14|           7272|
-near west side        |     67881|11929.88|           6743|
-north lawndale        |     34794|10839.25|           6161|
-auburn gresham        |     44878|11903.98|           5873|
-humboldt park         |     54165|15045.83|           5767|
-greater grand crossing|     31471| 8865.07|           5545|
-west town             |     87781|19166.16|           5486|
-loop                  |     42298|25635.15|           5446|
-
-#### What are the top ten communities that had the least amount of crimes reported?
-##### We will also add the current population to see if area density is also a factor.
-
-````sql
-SELECT 
-	community_name AS community,
-	population,
-	density,
-	count(*) AS reported_crimes
-FROM chicago_crimes
-group BY 
-	community_name,
-	population,
-	density
-ORDER BY reported_crimes
-LIMIT 10;
-````
-
-**Results:**
-
-community      |population|density |Reported Crimes|
----------------|----------|--------|---------------|
-edison park    |     11525|10199.12|            238|
-burnside       |      2527| 4142.62|            321|
-forest glen    |     19596| 6123.75|            460|
-mount greenwood|     18628| 6873.80|            492|
-montclare      |     14401|14546.46|            508|
-fuller park    |      2567| 3615.49|            541|
-oakland        |      6799|11722.41|            581|
-hegewisch      |     10027| 1913.55|            598|
-archer heights |     14196| 7062.69|            653|
-north park     |     17559| 6967.86|            679|
+min_date               |max_date               |
+-----------------------|-----------------------|
+2018-01-01 00:00:00.000|2022-12-31 23:59:00.000|
 
 #### What month had the most crimes reported?
 

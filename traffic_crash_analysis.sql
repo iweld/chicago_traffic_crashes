@@ -67,7 +67,7 @@ total_records|
 -------------+
        686276|
 
--- What is the earliest and latest date?
+-- What is the earliest and latest date of recorded crashes?
 
 SELECT 
 	min(crash_date) AS earliest_date,
@@ -84,7 +84,7 @@ earliest_date          |latest_date            |
 -- What is the number of reported crashes per year?
 
 SELECT
-	EXTRACT(YEAR FROM crash_date) AS crash_year,
+	EXTRACT(YEAR FROM crash_date)::numeric AS crash_year,
 	count(*) AS reported_crashes
 FROM
 	crashes
@@ -97,37 +97,52 @@ ORDER BY
 
 crash_year|reported_crashes|
 ----------+----------------+
-    2013.0|               2|
-    2014.0|               6|
-    2015.0|            9828|
-    2016.0|           44297|
-    2017.0|           83786|
-    2018.0|          118950|
-    2019.0|          117762|
-    2020.0|           92088|
-    2021.0|          108756|
-    2022.0|          108292|
-    2023.0|            2509|
+      2013|               2|
+      2014|               6|
+      2015|            9828|
+      2016|           44297|
+      2017|           83786|
+      2018|          118950|
+      2019|          117762|
+      2020|           92088|
+      2021|          108756|
+      2022|          108292|
+      2023|            2509|
     
 -- 2017 appears to be the first year with the most complete data but there appears to be missing data.
--- Lets take a look at 2017 data to see if we notice anything wrong.
-    
-SELECT
-	EXTRACT(YEAR FROM crash_date) AS crash_year,
-	crash_month,
-	count(*)
-FROM
-	crashes
-WHERE
-	EXTRACT(YEAR FROM crash_date) = '2017.0'
-OR
-	EXTRACT(YEAR FROM crash_date) = '2018.0'
-GROUP BY
-	crash_year,
-	crash_month
-ORDER BY
-	crash_month;
+-- Lets take a look at 2017 data and compare to 2018 data to see if we notice any major inconsistancies.
 
+WITH get_2017 AS (
+	SELECT
+		EXTRACT(YEAR FROM crash_date) AS crash_year,
+		crash_month::numeric,
+		count(*)
+	FROM
+		crashes
+	WHERE
+		EXTRACT(YEAR FROM crash_date) = '2017.0'
+	GROUP BY
+		crash_year,
+		crash_month
+),
+get_2018 AS (
+	SELECT
+		EXTRACT(YEAR FROM crash_date) AS crash_year,
+		crash_month::numeric,
+		count(*)
+	FROM
+		crashes
+	WHERE
+		EXTRACT(YEAR FROM crash_date) = '2018.0'
+	GROUP BY
+		crash_year,
+		crash_month
+)
+SELECT
+	to_char(g17.crash_month, 'Month')
+FROM
+	get_2017 AS g17
+	
 -- Results:
 
 crash_year|crash_month|count|
@@ -157,8 +172,8 @@ crash_year|crash_month|count|
     2017.0|9          | 9038|
     2018.0|9          | 9931|
 
--- After a simple we can conclude that 2017 is incomplete and not going to be used in our analysis.
--- Create a temp table with only crashes betweeon 2017 and 2022
+-- After a simple analysis we can conclude that the 2017 data is incomplete and not going to be used in our analysis.
+-- Create a temp table with only crashes between 2018 and 2022
     
 DROP TABLE IF EXISTS crash_timeline;
 CREATE TEMP TABLE crash_timeline AS
