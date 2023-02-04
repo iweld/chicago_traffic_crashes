@@ -252,46 +252,23 @@ fixed object        |-409 days -07:40:00|
 fixed object        |-374 days -01:45:00|
 rear end            |-370 days -19:44:00|
 
-#### What are the top ten city streets that have had the most homicides including ties?
+#### What is the average and median date difference between crash date and police report date?
 
 ````sql
- SELECT
- 	street_name,
- 	n_homicides
- from
-	(SELECT
-		street_name,
-		count(*) AS n_homicides,
-		rank() OVER (ORDER BY count(*) DESC) AS rnk
-	FROM
-		chicago_crimes
-	WHERE
-		crime_type = 'homicide'
-	GROUP BY
-		street_name
-	ORDER BY
-		count(*) DESC) AS tmp
-WHERE 
-	rnk <= 10;
+SELECT
+	 avg(date_police_notified - crash_date) AS avg_date_difference,
+	 PERCENTILE_CONT(0.5) WITHIN GROUP(ORDER BY (date_police_notified - crash_date)) AS median_date_diff
+FROM
+	crash_timeline
+WHERE
+	(date_police_notified - crash_date) > '00:00:00';
 ````
 
 **Results:**
 
-street_name                 |n_homicides|
-----------------------------|-----------|
- 79th st                    |         14|
- madison st                 |         14|
- morgan st                  |         10|
- 71st st                    |         10|
- michigan ave               |          9|
- cottage grove ave          |          9|
- van buren st               |          8|
- cicero ave                 |          7|
- dr martin luther king jr dr|          7|
- pulaski rd                 |          7|
- state st                   |          7|
- emerald ave                |          7|
- polk st                    |          7|
+avg_date_difference|median_date_difference|
+-------------------+----------------------+
+14:33:38.825155|              00:35:00|
 
 #### What are the top ten city streets that have had the most burglaries?
 
