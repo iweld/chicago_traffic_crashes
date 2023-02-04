@@ -414,26 +414,40 @@ WITH weekday_crash AS (
 		day_count DESC
 ),
 get_fatalities AS (
-
+	SELECT
+		crash_day_of_week,
+		count(*) AS fatality_count
+	FROM
+		crash_timeline
+	WHERE
+		injuries_fatal <> '0'
+	GROUP BY
+		crash_day_of_week
+	ORDER BY
+		fatality_count DESC
 )
 SELECT
-	crash_day_of_week,
-	day_count,
-	round(100 * ((day_count * 1.0) / (SELECT count(*) FROM crash_timeline)), 1) AS avg_of_total
+	wc.crash_day_of_week,
+	wc.day_count,
+	gf.fatality_count,
+	round(100 * ((wc.day_count * 1.0) / (SELECT count(*) FROM crash_timeline)), 1) AS avg_of_total
 FROM
-	weekday_crash;
+	weekday_crash AS wc
+LEFT JOIN 
+	get_fatalities AS gf
+ON wc.crash_day_of_week = gf.crash_day_of_week;
 
 -- Results:
 
-crash_day_of_week|day_count|avg_of_total|
------------------+---------+------------+
-friday           |    88742|        16.3|
-saturday         |    81323|        14.9|
-thursday         |    78138|        14.3|
-tuesday          |    77316|        14.2|
-wednesday        |    76740|        14.1|
-monday           |    75375|        13.8|
-sunday           |    68214|        12.5|
+crash_day_of_week|day_count|fatality_count|avg_of_total|
+-----------------+---------+--------------+------------+
+friday           |    88742|            84|        16.3|
+saturday         |    81323|           103|        14.9|
+thursday         |    78138|           100|        14.3|
+tuesday          |    77316|            58|        14.2|
+wednesday        |    76740|            93|        14.1|
+monday           |    75375|            86|        13.8|
+sunday           |    68214|           119|        12.5|
 
 -- What are the top 10 deadliest streets?
 
