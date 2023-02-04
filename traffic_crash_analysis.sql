@@ -195,6 +195,22 @@ FROM
 record_count|
 ------------+
       545848|
+      
+-- What is the average and median date difference?
+
+SELECT
+	 avg(date_police_notified - crash_date) AS avg_date_difference,
+	 PERCENTILE_CONT(0.5) WITHIN GROUP(ORDER BY (date_police_notified - crash_date)) AS median_date_diff
+FROM
+	crash_timeline
+WHERE
+	(date_police_notified - crash_date) > '00:00:00';
+
+-- Results:
+
+avg_date_difference|mean_date_diff|
+-------------------+--------------+
+    14:52:31.517892|      00:35:00|
 
 -- What are the different types of lighting conditions and the number of crashes?
 
