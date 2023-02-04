@@ -355,267 +355,39 @@ hour_of_day|hour_count|avg_of_total|hour_to_hour|
 10 PM      |     16598|         3.0|       -8.30|
 11 PM      |     14622|         2.7|      -11.91|
 
-![Hottest vs Coldest Day Bar Chart](https://github.com/iweld/chicago_crime_and_weather_2021/blob/main/img/bar_hot_vs_cold.PNG)
-
-#### What is the number and types of reported crimes on Michigan Ave (The Rodeo Drive of the Midwest)?
+#### How many road defects caused crashes?
 
 ````sql
-SELECT
-	crime_type,
-	count(*) AS michigan_ave_crimes
-FROM 
-	chicago_crimes
-WHERE 
-	street_name like '%michigan ave%'
-GROUP BY 
-	crime_type
-ORDER BY 
-	michigan_ave_crimes desc;
-````
-
-**Results:**
-
-crime_type                       |michigan_ave_crimes|
----------------------------------|-------------------|
-theft                            |                923|
-battery                          |                564|
-assault                          |                324|
-deceptive practice               |                317|
-criminal damage                  |                269|
-motor vehicle theft              |                212|
-other offense                    |                172|
-weapons violation                |                106|
-robbery                          |                106|
-burglary                         |                 92|
-criminal trespass                |                 53|
-criminal sexual assault          |                 30|
-offense involving children       |                 22|
-narcotics                        |                 16|
-public peace violation           |                 14|
-sex offense                      |                 10|
-homicide                         |                  9|
-liquor law violation             |                  8|
-stalking                         |                  5|
-interference with public officer |                  5|
-obscenity                        |                  1|
-arson                            |                  1|
-intimidation                     |                  1|
-concealed carry license violation|                  1|
-
-#### What are the top 5 least reported crime, how many arrests were made and the percentage of arrests made?
-
-````sql
-SELECT
-	crime_type,
-	least_amount,
-	arrest_count,
-	round(100 * (arrest_count::float / least_amount)) AS arrest_percentage
-from
-	(SELECT
-		crime_type,
-		count(*) AS least_amount,
-		sum(CASE
-			WHEN arrest = 'true' THEN 1
-			ELSE 0
-		END) AS arrest_count
-	FROM chicago_crimes
-	GROUP BY 
-		crime_type
-	ORDER BY least_amount
-	LIMIT 5) AS tmp;
-````
-
-**Results:**
-
-crime_type              |least_amount|arrest_count|arrest_percentage|
-------------------------|------------|------------|-----------------|
-other narcotic violation|           2|           1|             50.0|
-non-criminal            |           4|           1|             25.0|
-public indecency        |           4|           4|            100.0|
-human trafficking       |          12|           0|              0.0|
-gambling                |          13|          11|             85.0|
-
-#### What is the percentage of domestic violence crimes?
-
-````sql
-SELECT
-	100 - n_domestic_perc AS non_domestic_violence,
-	n_domestic_perc AS domestic_violence
-from
-	(SELECT
-		round(100 * (SELECT count(*) FROM chicago_crimes WHERE domestic = true)::numeric / count(*), 2) AS n_domestic_perc
-	FROM 
-		chicago_crimes) AS tmp
-````
-
-**Results:**
-
-non_domestic_violence|domestic_violence|
----------------------|-----------------|
-78.20|            21.80|
-
-![Domestic Violence Percdentage Bar Chart](https://github.com/iweld/chicago_crime_and_weather_2021/blob/main/img/bar_domestic_violence.PNG)
-
-
-
-#### Display how many crimes were reported on a monthly basis in chronological order.  What is the month to month percentage change of crimes reported?
-
-````sql
-SELECT
-	crime_month,
-	n_crimes,
-	round(100 * (n_crimes - LAG(n_crimes) over()) / LAG(n_crimes) over()::numeric, 2) AS month_to_month
-FROM
-	(SELECT
-		to_char(crime_date, 'Month') AS crime_month,
-		count(*) AS n_crimes
-	FROM 
-		chicago_crimes
-	GROUP BY 
-		crime_month
-	ORDER BY
-		to_date(to_char(crime_date, 'Month'), 'Month')) AS tmp
-````
-
-**Results:**
-
-crime_month|n_crimes|month_to_month|
------------|--------|--------------|
-January    |   16038|              |
-February   |   12888|        -19.64|
-March      |   15742|         22.14|
-April      |   15305|         -2.78|
-May        |   17539|         14.60|
-June       |   18566|          5.86|
-July       |   18966|          2.15|
-August     |   18255|         -3.75|
-September  |   18987|          4.01|
-October    |   19018|          0.16|
-November   |   16974|        -10.75|
-December   |   14258|        -16.00|
-
-#### Display the most consecutive days where a homicide occured and the timeframe.
-
-````sql
-WITH get_all_dates AS (
-	-- Get only one date per homicide
-	SELECT DISTINCT ON (crime_date::date)
-		crime_date::date AS c_date
-	FROM
-		chicago_crimes
-	WHERE
-		crime_type = 'homicide'
-),
-get_diff AS (
-	SELECT 
-		c_date,
-		row_number() OVER () AS rn,
-		c_date - row_number() OVER ()::int AS diff
-	from
-		get_all_dates
-),
-get_diff_count AS (
+WITH all_road_defects AS (
 	SELECT
-		c_date,
-		count(*) over(PARTITION BY diff) AS diff_count
+		road_defect,
+		count(*) AS defect_count
 	from
-		get_diff
+		crash_timeline
 	GROUP BY
-		c_date,
-		diff
+		road_defect
+	ORDER BY 
+		defect_count DESC
 )
 SELECT
-	max(diff_count) AS most_consecutive_days,
-	min(c_date) || ' to ' || max(c_date) AS time_frame
-from
-	get_diff_count
-WHERE diff_count > 40;
-````
-
-**Results:**
-
-most_consecutive_days|time_frame              |
----------------------|------------------------|
-43|2021-06-17 to 2021-07-29|
-
-#### What are the top 10 most common locations for reported crimes and their frequency depending on the season?
-
-````sql
-SELECT
-	location_description,
-	count(*) AS location_description_count,
-	sum(
-		CASE
-			WHEN crime_date::date >= '2021-04-15' AND crime_date::date <= '2021-10-15' THEN 1
-			ELSE 0
-		END) AS mild_weather,
-	sum(
-		CASE
-			WHEN crime_date::date >= '2021-01-01' AND crime_date::date < '2021-04-15' THEN 1
-			WHEN crime_date::date > '2021-10-15' AND crime_date::date <= '2021-12-31' THEN 1
-			ELSE 0
-		END) AS cold_weather
+	road_defect,
+	defect_count,
+	round(100 * ((defect_count * 1.0) / (SELECT count(*) FROM crash_timeline)), 1) AS avg_of_total
 FROM
-	chicago_crimes
-WHERE
-	location_description IS NOT NULL
-GROUP BY
-	location_description
-ORDER BY 
-	location_description_count DESC
-LIMIT 10;
+	all_road_defects;
 ````
 
 **Results:**
 
-location_description                  |location_description_count|mild_weather|cold_weather|
---------------------------------------|--------------------------|------------|------------|
-street                                |                     51310|       28308|       23002|
-apartment                             |                     43253|       22823|       20430|
-residence                             |                     31081|       15923|       15158|
-sidewalk                              |                     11687|        7083|        4604|
-parking lot / garage (non residential)|                      6324|        3497|        2827|
-small retail store                    |                      5300|        2773|        2527|
-alley                                 |                      4694|        2647|        2047|
-restaurant                            |                      3650|        2025|        1625|
-residence - porch / hallway           |                      2932|        1500|        1432|
-gas station                           |                      2921|        1562|        1359|
-
-#### What is the Month, day of the week and the number of homicides that occured in a babershop or beauty salon?
-
-````sql
-SELECT
-	DISTINCT location_description,
-	crime_type,
-	to_char(crime_date, 'Month') AS crime_month,
-	to_char(crime_date, 'Day') AS crime_day,
-	count(*) AS incident_count
-FROM
-	chicago_crimes
-WHERE
-	location_description LIKE '%barber%'
-AND 
-	crime_type = 'homicide'
-GROUP BY 
-	location_description,
-	crime_month,
-	crime_day,
-	crime_type
-ORDER BY
-	incident_count DESC;
-````
-
-**Results:**
-
-location_description    |crime_type|crime_month|crime_day|incident_count|
-------------------------|----------|-----------|---------|--------------|
-barber shop/beauty salon|homicide  |July       |Wednesday|             2|
-barber shop/beauty salon|homicide  |November   |Tuesday  |             2|
-barber shop/beauty salon|homicide  |April      |Friday   |             1|
-barber shop/beauty salon|homicide  |August     |Sunday   |             1|
-barber shop/beauty salon|homicide  |January    |Thursday |             1|
-
-
+road_defect      |defect_count|avg_of_total|
+-----------------|------------|------------|
+no defects       |      445069|        81.5|
+unknown          |       89942|        16.5|
+rut, holes       |        4219|         0.8|
+other            |        3036|         0.6|
+worn surface     |        2154|         0.4|
+shoulder defect  |        1009|         0.2|
+debris on roadway|         419|         0.1|
 
 
 
