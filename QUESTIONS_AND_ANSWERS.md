@@ -1,7 +1,7 @@
 # Chicago Traffic Crashes 2018-2022
 ## Questions and Answers
 
-**Author**: Jaime M. Shaker
+**Author**: Jaime M. Shaker </ br>
 **Email**: jaime.m.shaker@gmail.com
 **Website**: https://www.shaker.dev
 **LinkedIn**: https://www.linkedin.com/in/jaime-shaker/
