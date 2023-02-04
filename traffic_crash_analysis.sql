@@ -57,15 +57,15 @@
 -- What is the total count of recorded crashes in the dataset?
 
 SELECT
-	count(*) AS record_count
+	count(*) AS total_records
 FROM
 	crashes;
 	
 -- Results:
 
-record_count|
-------------+
-      686276|
+total_records|
+-------------+
+       686276|
 
 -- What is the earliest and latest date?
 
