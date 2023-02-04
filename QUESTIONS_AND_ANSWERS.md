@@ -267,7 +267,7 @@ WHERE
 **Results:**
 
 avg_date_difference|median_date_difference|
--------------------+----------------------+
+-------------------|----------------------|
 14:33:38.825155|              00:35:00|
 
 #### What are the top ten city streets that have had the most burglaries?
