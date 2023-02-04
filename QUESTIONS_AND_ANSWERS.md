@@ -270,82 +270,90 @@ avg_date_difference|median_date_difference|
 -------------------|----------------------|
 14:33:38.825155|              00:35:00|
 
-#### What are the top ten city streets that have had the most burglaries?
+#### What are the top 5 Crash Types?
 
 ````sql
-SELECT
-	street_name,
-	count(*) AS n_burglaries
-FROM
-	chicago_crimes
-WHERE
-	crime_type = 'burglary'
-group BY
-	street_name
-ORDER BY
-	n_burglaries DESC
-LIMIT 10;
-````
-
-**Results:**
-
-street_name                 |n_burglaries|
-----------------------------|------------|
- ashland ave                |         104|
- halsted st                 |         103|
- michigan ave               |          92|
- western ave                |          79|
- kedzie ave                 |          67|
- north ave                  |          62|
- chicago ave                |          50|
- dr martin luther king jr dr|          50|
- 79th st                    |          48|
- sheridan rd                |          45|
-
-
-#### What was the number of reported crimes on the hottest day of the year vs the coldest?
-
-````sql
-WITH hottest AS (
+WITH get_crash_type AS (    
 	SELECT
-	  	temp_high,
-	 	count(*) AS n_crimes
+		first_crash_type,
+		count(*) AS crash_count,
+		RANK() OVER (ORDER BY count(*) desc) AS rnk
 	FROM
-	 	chicago_crimes
-	WHERE
-	 	temp_high = (SELECT max(temp_high) FROM chicago_crimes)
-	GROUP BY temp_high
-),
-coldest AS (
-	SELECT
-	  	temp_high,
-	 	count(*) AS n_crimes
-	FROM
-	 	chicago_crimes
-	WHERE
-	 	temp_high = (SELECT min(temp_high) FROM chicago_crimes)
-	GROUP BY temp_high
+		crash_timeline
+	GROUP BY
+		first_crash_type
 )
-
 SELECT
-	h.temp_high,
-	h.n_crimes
-FROM 
-	hottest AS h
-UNION
-SELECT
-	c.temp_high,
-	c.n_crimes
-FROM 
-	coldest AS c;
+	first_crash_type AS crash_type,
+	crash_count
+FROM
+	get_crash_type
+WHERE
+	rnk <= 5;
 ````
 
 **Results:**
 
-temp_high|n_crimes|
----------|--------|
-95|     552|
-4|     402|
+crash_type              |crash_count|
+------------------------|-----------|
+parked motor vehicle    |     128858|
+rear end                |     118761|
+sideswipe same direction|      80109|
+turning                 |      78399|
+angle                   |      59406|
+
+
+#### What is the frequency of crashes relative to the time of day and what is the hour per hour percentage change?
+
+````sql
+WITH most_dangerous_hour AS (
+	SELECT
+		crash_hour,
+		count(*) as hour_count
+	FROM
+		crash_timeline
+	GROUP BY 
+		crash_hour
+	ORDER BY
+		crash_hour::int ASC
+)
+SELECT
+	to_char(to_timestamp(crash_hour, 'HH24'), 'HH AM') AS hour_of_day,
+	hour_count,
+	round(100 * ((hour_count * 1.0) / (SELECT count(*) FROM crash_timeline)), 1) AS avg_of_total,
+	round(100 * (hour_count - LAG(hour_count) OVER ()) / LAG(hour_count) OVER()::NUMERIC, 2) AS hour_to_hour 
+FROM
+	most_dangerous_hour;
+````
+
+**Results:**
+
+hour_of_day|hour_count|avg_of_total|hour_to_hour|
+-----------|----------|------------|------------|
+12 AM      |     12368|         2.3|            |
+01 AM      |     10490|         1.9|      -15.18|
+02 AM      |      8934|         1.6|      -14.83|
+03 AM      |      7354|         1.3|      -17.69|
+04 AM      |      6543|         1.2|      -11.03|
+05 AM      |      7685|         1.4|       17.45|
+06 AM      |     11778|         2.2|       53.26|
+07 AM      |     22233|         4.1|       88.77|
+08 AM      |     27969|         5.1|       25.80|
+09 AM      |     24783|         4.5|      -11.39|
+10 AM      |     24928|         4.6|        0.59|
+11 AM      |     28023|         5.1|       12.42|
+12 PM      |     32337|         5.9|       15.39|
+01 PM      |     33064|         6.1|        2.25|
+02 PM      |     36388|         6.7|       10.05|
+03 PM      |     41462|         7.6|       13.94|
+04 PM      |     41479|         7.6|        0.04|
+05 PM      |     40324|         7.4|       -2.78|
+06 PM      |     33211|         6.1|      -17.64|
+07 PM      |     24833|         4.5|      -25.23|
+08 PM      |     20342|         3.7|      -18.08|
+09 PM      |     18100|         3.3|      -11.02|
+10 PM      |     16598|         3.0|       -8.30|
+11 PM      |     14622|         2.7|      -11.91|
 
 ![Hottest vs Coldest Day Bar Chart](https://github.com/iweld/chicago_crime_and_weather_2021/blob/main/img/bar_hot_vs_cold.PNG)
 
