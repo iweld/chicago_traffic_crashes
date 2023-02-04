@@ -480,7 +480,48 @@ Kedzie Ave      |          12|
 Lake Shore Dr Sb|          12|
 Stony Island Ave|          12|
 
+-- Use rank function to rank crash type for crashes which had a fatality.
 
+WITH get_same_rank AS (
+	SELECT
+		first_crash_type,
+		count(*) AS fatality_count,
+		DENSE_RANK() OVER (ORDER BY count(*) desc) AS rnk
+	FROM
+		crash_timeline
+	WHERE
+		injuries_fatal <> '0'
+	GROUP BY 
+		first_crash_type
+)
+SELECT
+	g1.first_crash_type,
+	g1.fatality_count
+FROM
+	get_same_rank AS g1
+ORDER BY
+	g1.rnk;
+
+-- Results:
+
+first_crash_type            |fatality_count|
+----------------------------+--------------+
+pedestrian                  |           164|
+fixed object                |           155|
+angle                       |            74|
+parked motor vehicle        |            69|
+turning                     |            51|
+head on                     |            31|
+pedalcyclist                |            26|
+rear end                    |            26|
+sideswipe same direction    |            17|
+other object                |            13|
+other noncollision          |             4|
+sideswipe opposite direction|             4|
+animal                      |             4|
+overturned                  |             2|
+rear to front               |             2|
+train                       |             1|
 
 
 
