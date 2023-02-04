@@ -198,33 +198,31 @@ unknown               |      22509|
 dusk                  |      15600|
 dawn                  |       9300|
 
-#### What weekday were most crimes committed?
+#### What are the different kinds of road conditions and the number of crashes?
 
 ````sql
 SELECT
-	to_char(CRIME_DATE::timestamp, 'Day') AS day_of_week,
-	COUNT(*) AS n_crimes
+	DISTINCT roadway_surface_condition,
+	count(*) AS crash_count
 FROM
-	chicago_crimes
+	crash_timeline
 GROUP BY
-	day_of_week
+	roadway_surface_condition
 ORDER BY
-	n_crimes DESC;
+	crash_count DESC;
 ````
 
 **Results:**
 
-day_of_week|n_crimes|
------------|--------|
-Saturday   |   29841|
-Friday     |   29829|
-Sunday     |   29569|
-Monday     |   29194|
-Wednesday  |   28143|
-Tuesday    |   28135|
-Thursday   |   27825|
-
-![Day of the Week totals Bar Chart](https://github.com/iweld/chicago_crime_and_weather_2021/blob/main/img/bar_day_of_week_totals.PNG)
+roadway_surface_condition|crash_count|
+-------------------------|-----------|
+dry                      |     403694|
+wet                      |      72751|
+unknown                  |      42152|
+snow or slush            |      21557|
+ice                      |       4060|
+other                    |       1433|
+sand, mud, dirt          |        201|
 
 #### What are the top ten city streets that have had the most reported crimes?
 
