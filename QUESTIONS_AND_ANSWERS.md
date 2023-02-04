@@ -224,35 +224,33 @@ ice                      |       4060|
 other                    |       1433|
 sand, mud, dirt          |        201|
 
-#### What are the top ten city streets that have had the most reported crimes?
+#### What is the crash_type and max amount difference between crash date and the date it was reported?
 
 ````sql
 SELECT
-	street_name,
-	count(*) AS n_crimes
+	first_crash_type,
+	crash_date - date_police_notified AS date_diff
 FROM
-	chicago_crimes
-GROUP BY
-	street_name
+	crash_timeline
 ORDER BY
-	count(*) DESC
+	date_diff
 LIMIT 10;
 ````
 
 **Results:**
 
-street_name                 |n_crimes|
-----------------------------|--------|
- michigan ave               |    3257|
- state st                   |    2858|
- halsted st                 |    2329|
- ashland ave                |    2276|
- clark st                   |    2036|
- western ave                |    1987|
- dr martin luther king jr dr|    1814|
- pulaski rd                 |    1686|
- kedzie ave                 |    1606|
- madison st                 |    1584|
+first_crash_type    |date_diff          |
+--------------------|-------------------|
+rear end            |-730 days -21:45:00|
+rear end            |          -730 days|
+fixed object        |-702 days -00:06:00|
+fixed object        |-505 days -06:15:00|
+parked motor vehicle|-454 days -13:04:00|
+rear end            |          -430 days|
+parked motor vehicle|-411 days -16:25:00|
+fixed object        |-409 days -07:40:00|
+fixed object        |-374 days -01:45:00|
+rear end            |-370 days -19:44:00|
 
 #### What are the top ten city streets that have had the most homicides including ties?
 
