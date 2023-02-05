@@ -647,6 +647,37 @@ crash_year|fatality_count|year_rank|
       2018|           114|        4|
       2019|           102|        5|
 
+-- What month has the most amount of fatal crashes?
+
+SELECT
+	to_char(to_date(crash_month::TEXT, 'MM'), 'Month') AS crash_month,
+	count(*) AS fatality_count
+FROM
+	crash_timeline
+WHERE
+	injuries_fatal <> '0'
+GROUP BY
+	crash_month
+ORDER BY
+	fatality_count DESC;
+
+-- Results:
+
+crash_month|fatality_count|
+-----------+--------------+
+July       |            81|
+September  |            67|
+August     |            65|
+December   |            57|
+October    |            57|
+June       |            55|
+May        |            54|
+January    |            46|
+November   |            46|
+April      |            43|
+March      |            39|
+February   |            33|
+
 
 
 
