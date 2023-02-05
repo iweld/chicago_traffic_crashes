@@ -139,7 +139,7 @@ get_2018 AS (
 		crash_month
 )
 SELECT
-	DISTINCT g17.crash_month,
+	to_char(to_date(g17.crash_month::TEXT, 'MM'), 'Month') AS crash_month,
 	g17.crash_count AS "2017_count",
 	g18.crash_count AS "2018_count"
 FROM
@@ -154,18 +154,18 @@ ORDER BY
 
 crash_month|2017_count|2018_count|
 -----------+----------+----------+
-          1|      4363|      9532|
-          2|      4109|      8729|
-          3|      5105|      9319|
-          4|      5024|      9648|
-          5|      5847|     10714|
-          6|      6212|     10601|
-          7|      6758|     10367|
-          8|      7685|     10212|
-          9|      9038|      9931|
-         10|     10022|     10402|
-         11|      9515|      9474|
-         12|     10108|     10021|
+January    |      4363|      9532|
+February   |      4109|      8729|
+March      |      5105|      9319|
+April      |      5024|      9648|
+May        |      5847|     10714|
+June       |      6212|     10601|
+July       |      6758|     10367|
+August     |      7685|     10212|
+September  |      9038|      9931|
+October    |     10022|     10402|
+November   |      9515|      9474|
+December   |     10108|     10021|
 
 -- After a simple analysis we can conclude that the early 2017 data is incomplete and not going to be used in our analysis.
 -- Create a temp table with recorded crashes between 2018 and 2022 and check the record dates.
