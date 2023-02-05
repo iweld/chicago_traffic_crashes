@@ -622,11 +622,12 @@ monday           |            86|
 friday           |            84|
 tuesday          |            58|
 
--- What was the deadliest year in our recordset?
+-- What was the ranking of the deadliest years in our recordset?
 
 SELECT
 	EXTRACT(YEAR FROM crash_date)::numeric AS crash_year,
-	count(*) AS fatality_count
+	count(*) AS fatality_count,
+	RANK() OVER (ORDER BY count(*) desc) AS year_rank
 FROM
 	crash_timeline
 WHERE
@@ -638,13 +639,13 @@ ORDER BY
 
 -- Results:
 
-crash_year|fatality_count|
-----------+--------------+
-      2021|           156|
-      2022|           137|
-      2020|           134|
-      2018|           114|
-      2019|           102|
+crash_year|fatality_count|year_rank|
+----------+--------------+---------+
+      2021|           156|        1|
+      2022|           137|        2|
+      2020|           134|        3|
+      2018|           114|        4|
+      2019|           102|        5|
 
 
 
