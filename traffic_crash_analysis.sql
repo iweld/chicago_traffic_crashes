@@ -137,18 +137,35 @@ get_2018 AS (
 	GROUP BY
 		crash_year,
 		crash_month
+),
+get_count_diff AS (
+	SELECT
+		to_char(to_date(g17.crash_month::TEXT, 'MM'), 'Month') AS crash_month,
+		g17.crash_count AS count_2017,
+		g18.crash_count AS count_2018,
+		g18.crash_count - g17.crash_count AS count_diff
+	FROM
+		get_2017 AS g17
+	JOIN
+		get_2018 AS g18
+	ON g17.crash_month = g18.crash_month
+	ORDER BY
+		g17.crash_month::NUMERIC
 )
 SELECT
-	to_char(to_date(g17.crash_month::TEXT, 'MM'), 'Month') AS crash_month,
-	g17.crash_count AS "2017_count",
-	g18.crash_count AS "2018_count"
+	crash_month,
+	count_2017,
+	count_2018,
+	count_diff,
+	CASE
+		WHEN count_diff >= (count_2018 * .5) THEN 'Over 50% Difference'
+		WHEN count_diff >= (count_2018 * .4) THEN 'Over 40% Difference'
+		WHEN count_diff >= (count_2018 * .3) THEN 'Over 30% Difference'
+		WHEN count_diff >= (count_2018 * .2) THEN 'Over 20% Difference'
+		ELSE 'No Significant Difference'
+	END 
 FROM
-	get_2017 AS g17
-JOIN
-	get_2018 AS g18
-ON g17.crash_month = g18.crash_month
-ORDER BY
-	g17.crash_month::NUMERIC 
+	get_count_diff;
 	
 -- Results:
 
