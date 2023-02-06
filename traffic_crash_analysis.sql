@@ -708,7 +708,8 @@ WHERE
 GROUP BY
 	crash_date::date
 ORDER BY
-	fatality_count DESC;
+	fatality_count DESC
+LIMIT 10;
 
 
 
