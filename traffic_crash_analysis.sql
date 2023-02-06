@@ -695,8 +695,20 @@ April      |            43|
 March      |            39|
 February   |            33|
 
+-- What single day has the most amount of fatal crashes?
 
-
+SELECT
+	crash_date::date,
+	count(*) AS fatality_count,
+	RANK() OVER (ORDER BY count(*) desc) AS date_rank
+FROM
+	crash_timeline
+WHERE
+	injuries_fatal <> '0'
+GROUP BY
+	crash_date::date
+ORDER BY
+	fatality_count DESC;
 
 
 
