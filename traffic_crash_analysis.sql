@@ -537,7 +537,7 @@ Stony Island Ave|          12|
 
 -- Use rank function to rank crash type for crashes which had a fatality.
 
-WITH get_same_rank AS (
+WITH get_fatality_rank AS (
 	SELECT
 		first_crash_type,
 		count(*) AS fatality_count,
@@ -553,7 +553,7 @@ SELECT
 	g1.first_crash_type,
 	g1.fatality_count
 FROM
-	get_same_rank AS g1
+	get_fatality_rank AS g1
 ORDER BY
 	g1.rnk;
 
@@ -725,6 +725,28 @@ crash_date|fatality_count|date_rank|
 2020-12-02|             3|        2|
 2020-10-19|             3|        2|
 2019-11-21|             3|        2|
+
+-- Use rank function to rank crash type for crashes which had a fatality.
+
+WITH get_same_rank AS (
+	SELECT
+		first_crash_type,
+		count(*) AS fatality_count,
+		DENSE_RANK() OVER (ORDER BY count(*) desc) AS rnk
+	FROM
+		crash_timeline
+	WHERE
+		injuries_fatal <> '0'
+	GROUP BY 
+		first_crash_type
+)
+SELECT
+	g1.first_crash_type,
+	g1.fatality_count
+FROM
+	get_same_rank AS g1
+ORDER BY
+	g1.rnk;
 
 
 
