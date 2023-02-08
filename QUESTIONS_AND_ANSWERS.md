@@ -260,18 +260,18 @@ LIMIT 10;
 
 **Results:**
 
-first_crash_type    |date_diff          |
---------------------|-------------------|
-rear end            |-730 days -21:45:00|
-rear end            |          -730 days|
-fixed object        |-702 days -00:06:00|
-fixed object        |-505 days -06:15:00|
-parked motor vehicle|-454 days -13:04:00|
-rear end            |          -430 days|
-parked motor vehicle|-411 days -16:25:00|
-fixed object        |-409 days -07:40:00|
-fixed object        |-374 days -01:45:00|
-rear end            |-370 days -19:44:00|
+first_crash_type    |date_diff        |
+--------------------|-----------------|
+rear end            |730 days 21:45:00|
+rear end            |         730 days|
+fixed object        |702 days 00:06:00|
+fixed object        |505 days 06:15:00|
+parked motor vehicle|454 days 13:04:00|
+rear end            |         430 days|
+parked motor vehicle|411 days 16:25:00|
+fixed object        |409 days 07:40:00|
+fixed object        |374 days 01:45:00|
+rear end            |370 days 19:44:00|
 
 #### What is the average and median date difference between crash date and police report date?
 
