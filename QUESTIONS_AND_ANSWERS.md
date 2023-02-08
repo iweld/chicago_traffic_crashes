@@ -410,6 +410,38 @@ worn surface     |        2154|         0.4|
 shoulder defect  |        1009|         0.2|
 debris on roadway|         419|         0.1|
 
+#### What are the top 5 Crash Types?
+
+````sql
+WITH get_primary_cause AS (    
+	SELECT
+		primary_cause,
+		count(*) AS cause_count,
+		RANK() OVER (ORDER BY count(*) desc) AS rnk
+	FROM
+		crash_timeline
+	GROUP BY
+		primary_cause
+)
+SELECT
+	primary_cause,
+	cause_count
+FROM
+	get_primary_cause
+WHERE
+	rnk <= 5;
+````
+
+**Results:**
+
+primary_cause                |cause_count|
+-----------------------------|-----------|
+unable to determine          |     211228|
+failing to yield right-of-way|      59735|
+following too closely        |      51273|
+not applicable               |      28703|
+improper overtaking/passing  |      26162|
+
 
 
 
