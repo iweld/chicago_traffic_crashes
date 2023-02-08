@@ -102,36 +102,53 @@ get_2018 AS (
 	GROUP BY
 		crash_year,
 		crash_month
+),
+get_count_diff AS (
+	SELECT
+		to_char(to_date(g17.crash_month::TEXT, 'MM'), 'Month') AS crash_month,
+		g17.crash_count AS count_2017,
+		g18.crash_count AS count_2018,
+		g18.crash_count - g17.crash_count AS count_diff
+	FROM
+		get_2017 AS g17
+	JOIN
+		get_2018 AS g18
+	ON g17.crash_month = g18.crash_month
+	ORDER BY
+		g17.crash_month::NUMERIC
 )
 SELECT
-	DISTINCT g17.crash_month,
-	g17.crash_count AS "2017_count",
-	g18.crash_count AS "2018_count"
+	crash_month,
+	count_2017,
+	count_2018,
+	count_diff,
+	CASE
+		WHEN count_diff >= (count_2018 * .5) THEN 'Over 50% Difference'
+		WHEN count_diff >= (count_2018 * .4) THEN 'Over 40% Difference'
+		WHEN count_diff >= (count_2018 * .3) THEN 'Over 30% Difference'
+		WHEN count_diff >= (count_2018 * .2) THEN 'Over 20% Difference'
+		ELSE 'No Significant Difference'
+	END AS difference_percentage_range
 FROM
-	get_2017 AS g17
-JOIN
-	get_2018 AS g18
-ON g17.crash_month = g18.crash_month
-ORDER BY
-	g17.crash_month::NUMERIC 
+	get_count_diff;
 ````
 
 **Results:**
 
-crash_month|2017_count|2018_count|
------------|----------|----------|
-1|      4363|      9532|
-2|      4109|      8729|
-3|      5105|      9319|
-4|      5024|      9648|
-5|      5847|     10714|
-6|      6212|     10601|
-7|      6758|     10367|
-8|      7685|     10212|
-9|      9038|      9931|
-10|     10022|     10402|
-11|      9515|      9474|
-12|     10108|     10021|
+crash_month|count_2017|count_2018|count_diff|difference_percentage_range|
+-----------|----------|----------|----------|---------------------------|
+January    |      4363|      9532|      5169|Over 50% Difference        |
+February   |      4109|      8729|      4620|Over 50% Difference        |
+March      |      5105|      9319|      4214|Over 40% Difference        |
+April      |      5024|      9648|      4624|Over 40% Difference        |
+May        |      5847|     10714|      4867|Over 40% Difference        |
+June       |      6212|     10601|      4389|Over 40% Difference        |
+July       |      6758|     10367|      3609|Over 30% Difference        |
+August     |      7685|     10212|      2527|Over 20% Difference        |
+September  |      9038|      9931|       893|No Significant Difference  |
+October    |     10022|     10402|       380|No Significant Difference  |
+November   |      9515|      9474|       -41|No Significant Difference  |
+December   |     10108|     10021|       -87|No Significant Difference  |
 
 ##### After a simple analysis we can conclude that the early 2017 data is incomplete and not going to be used in our analysis.
 
