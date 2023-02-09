@@ -509,7 +509,7 @@ sunday           |    68214|           119|        12.5|            0.022|
 
 SELECT
 	street_name,
-	count(*) AS street_count
+	count(*) AS fatality_count
 FROM
 	crash_timeline
 WHERE
@@ -517,23 +517,23 @@ WHERE
 GROUP BY
 	street_name
 ORDER BY
-	street_count DESC
+	fatality_count DESC
 LIMIT 10;
 
 -- Results:
 
-street_name     |street_count|
-----------------+------------+
-Cicero Ave      |          23|
-Ashland Ave     |          21|
-Western Ave     |          20|
-Pulaski Rd      |          19|
-Halsted St      |          17|
-Archer Ave      |          14|
-Lake Shore Dr Nb|          14|
-Kedzie Ave      |          12|
-Lake Shore Dr Sb|          12|
-Stony Island Ave|          12|
+street_name     |fatality_count|
+----------------+--------------+
+Cicero Ave      |            23|
+Ashland Ave     |            21|
+Western Ave     |            20|
+Pulaski Rd      |            19|
+Halsted St      |            17|
+Archer Ave      |            14|
+Lake Shore Dr Nb|            14|
+Kedzie Ave      |            12|
+Lake Shore Dr Sb|            12|
+Stony Island Ave|            12|
 
 -- Use rank function to rank crash type for crashes which had a fatality.
 
