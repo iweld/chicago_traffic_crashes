@@ -455,7 +455,7 @@ following too closely        |      51273|
 not applicable               |      28703|
 improper overtaking/passing  |      26162|
 
--- What is the average count per day of the week?
+-- What is the crash count per day of the week, average per day and fatality average?
 
 WITH weekday_crash AS (
 	SELECT
