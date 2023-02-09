@@ -494,6 +494,27 @@ wednesday        |    76740|            93|        14.1|            0.017|
 monday           |    75375|            86|        13.8|            0.016|
 sunday           |    68214|           119|        12.5|            0.022|
 
+#### What are the top 10 deadliest streets?
+
+````sql
+SELECT
+	street_name,
+	count(*) AS street_count
+FROM
+	crash_timeline
+WHERE
+	injuries_fatal <> '0'
+GROUP BY
+	street_name
+ORDER BY
+	street_count DESC
+LIMIT 10;
+````
+
+**Results:**
+
+
+
 
 
 
