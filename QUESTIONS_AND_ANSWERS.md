@@ -513,7 +513,18 @@ LIMIT 10;
 
 **Results:**
 
-
+street_name     |street_count|
+----------------|------------|
+Cicero Ave      |          23|
+Ashland Ave     |          21|
+Western Ave     |          20|
+Pulaski Rd      |          19|
+Halsted St      |          17|
+Archer Ave      |          14|
+Lake Shore Dr Nb|          14|
+Kedzie Ave      |          12|
+Lake Shore Dr Sb|          12|
+Stony Island Ave|          12|
 
 
 
