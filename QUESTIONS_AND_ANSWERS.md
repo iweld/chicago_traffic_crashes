@@ -552,18 +552,24 @@ ORDER BY
 
 **Results:**
 
-street_name     |fatality_count|
-----------------|--------------|
-Cicero Ave      |            23|
-Ashland Ave     |            21|
-Western Ave     |            20|
-Pulaski Rd      |            19|
-Halsted St      |            17|
-Archer Ave      |            14|
-Lake Shore Dr Nb|            14|
-Kedzie Ave      |            12|
-Lake Shore Dr Sb|            12|
-Stony Island Ave|            12|
+first_crash_type            |fatality_count|
+----------------------------|--------------|
+pedestrian                  |           164|
+fixed object                |           155|
+angle                       |            74|
+parked motor vehicle        |            69|
+turning                     |            51|
+head on                     |            31|
+pedalcyclist                |            26|
+rear end                    |            26|
+sideswipe same direction    |            17|
+other object                |            13|
+other noncollision          |             4|
+sideswipe opposite direction|             4|
+animal                      |             4|
+overturned                  |             2|
+rear to front               |             2|
+train                       |             1|
 
 
 
