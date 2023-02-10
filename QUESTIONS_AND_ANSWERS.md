@@ -571,6 +571,41 @@ overturned                  |             2|
 rear to front               |             2|
 train                       |             1|
 
+````sql
+SELECT
+	crash_date,
+	work_zone,                  
+	work_zone_type,              
+	workers_present,
+	injuries_total
+FROM
+	crash_timeline
+WHERE
+	work_zone IS NOT NULL
+AND
+	work_zone = 'y'
+AND
+	injuries_total::int > 1
+ORDER BY
+	injuries_total::int DESC
+LIMIT 10;
+````
+
+**Results:**
+
+crash_date             |work_zone|work_zone_type|workers_present|injuries_total|
+-----------------------|---------|--------------|---------------|--------------|
+2018-09-04 02:25:00.000|y        |construction  |               |7             |
+2019-05-03 07:13:00.000|y        |construction  |y              |6             |
+2021-12-14 07:55:00.000|y        |construction  |y              |6             |
+2022-07-21 15:50:00.000|y        |unknown       |n              |5             |
+2020-01-27 13:15:00.000|y        |construction  |               |5             |
+2018-05-31 15:17:00.000|y        |construction  |               |5             |
+2020-11-15 16:20:00.000|y        |utility       |y              |5             |
+2019-08-18 13:30:00.000|y        |construction  |               |4             |
+2018-03-26 07:35:00.000|y        |construction  |               |4             |
+2021-06-14 15:00:00.000|y        |construction  |               |4             |
+
 
 
 
