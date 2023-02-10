@@ -571,6 +571,8 @@ overturned                  |             2|
 rear to front               |             2|
 train                       |             1|
 
+##### Explore the data.
+
 ````sql
 SELECT
 	crash_date,
@@ -606,6 +608,33 @@ crash_date             |work_zone|work_zone_type|workers_present|injuries_total|
 2018-03-26 07:35:00.000|y        |construction  |               |4             |
 2021-06-14 15:00:00.000|y        |construction  |               |4             |
 
+#### What is the number of fatalities what days of the week did they occur?
+
+````sql
+SELECT
+	crash_day_of_week,
+	count(*) AS fatality_count
+FROM
+	crash_timeline
+WHERE
+	injuries_fatal <> '0'
+GROUP BY
+	crash_day_of_week
+ORDER BY
+	fatality_count DESC;
+````
+
+**Results:**
+
+crash_day_of_week|fatality_count|
+-----------------|--------------|
+sunday           |           119|
+saturday         |           103|
+thursday         |           100|
+wednesday        |            93|
+monday           |            86|
+friday           |            84|
+tuesday          |            58|
 
 
 
