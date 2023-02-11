@@ -696,6 +696,41 @@ April      |            43|
 March      |            39|
 February   |            33|
 
+#### What single day has the most amount of fatal crashes?
+
+````sql
+SELECT
+	crash_date::date,
+	weather_condition,
+	count(*) AS fatality_count,
+	dense_RANK() OVER (ORDER BY count(*) desc) AS date_rank
+FROM
+	crash_timeline
+WHERE
+	injuries_fatal <> '0'
+GROUP BY
+	crash_date::date,
+	weather_condition
+ORDER BY
+	fatality_count DESC
+LIMIT 10;
+````
+
+**Results:**
+
+crash_date|weather_condition|fatality_count|date_rank|
+----------|-----------------|--------------|---------|
+2022-07-04|clear            |             4|        1|
+2022-01-15|clear            |             3|        2|
+2020-06-19|clear            |             3|        2|
+2020-09-06|clear            |             3|        2|
+2020-12-02|clear            |             3|        2|
+2020-07-19|clear            |             3|        2|
+2019-05-16|clear            |             3|        2|
+2021-06-20|clear            |             3|        2|
+2018-07-28|clear            |             3|        2|
+2021-11-21|clear            |             2|        3|
+
 
 
 
